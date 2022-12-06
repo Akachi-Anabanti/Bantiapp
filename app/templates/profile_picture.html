@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<form method="POST" enctype="multipart/form-data" novalidate>
+  <h1>Change profile photo</h1>
+  {{ form.hidden_tag() }}
+  <p>
+    {{ form.file.label }} <br />
+    {{ form.file(class="form-control" )}} <br />
+    {% for error in form.file.errors %}
+    <span style="color: red">{{[ error ]}}</span>
+    {% endfor %}
+  </p>
+
+  <p>{{ form.submit(class='btn btn-primary shadow') }}</p>
+</form>
+{% endblock%}

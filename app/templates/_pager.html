@@ -1,0 +1,15 @@
+<div class="container">
+  <ul class="d-flex pager">
+    {% if prev_url %}
+    <li class="mx-4">
+      <a class="btn btn-outline-secondary btn-sm" href="{{ prev_url }}"
+        >Previous</a
+      >
+    </li>
+    {% endif %} {% if next_url %}
+    <li class="mx-4">
+      <a class="btn btn-outline-primary btn-sm" href="{{ next_url }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>

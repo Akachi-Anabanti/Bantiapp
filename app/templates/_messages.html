@@ -1,0 +1,20 @@
+<div class="">
+  <a
+    class="link-dark"
+    href="{{ url_for('user', username=post.author.username )}}"
+  >
+    <img
+      class="rounded-circle me-2"
+      src="{{ url_for('serve_photo', username=post.author.username) }}"
+      alt=""
+      width="25"
+      height="25"
+    />
+  </a>
+  <small class="text-muted"
+    >{{ moment(post.timestamp).fromNow(refresh=True) }}</small
+  >
+  <div class="shadow-sm rounded col-6 bg-secondary text-white">
+    <p class="mx-4">{{ post.body }}</p>
+  </div>
+</div>
