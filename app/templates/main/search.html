@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block page_content %} {% include 'main/_index.html'
+%}{% endblock %} {% block widget %}
+<div class="card" style="overflow: auto; height: 500px">
+  <div class="card-header">
+    <h3 class="text-center">{{ _('Search Results')}}</h3>
+  </div>
+  {% for post in posts %}
+  <div class="card m-2 shadow">
+    <div class="m-2">{% include 'main/_post.html' %}</div>
+  </div>
+  {% endfor %}
+  <div class="card-footer">{% include 'main/_pager.html' %}</div>
+</div>
+{{ super() }} {% endblock %}

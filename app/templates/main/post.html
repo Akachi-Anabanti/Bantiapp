@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block left_column %}
+<div>SIDEBAR GOES HERE</div>
+{% endblock %} {% block page_content %}
+
+<div class="mb-4 mt-2">
+  <div>{% include 'main/_post.html' %}</div>
+  <h3>Add Comment</h3>
+  {% if form %}
+  <form method="post" action="">
+    {{ form.hidden_tag() }} {{ form.comment(class='form-control') }} {{
+    form.submit(class='btn btn-primary mt-3', type='submit')}}
+  </form>
+  {% endif %} {% if not post.comments.all() %} No comments yet {% else %} {% for
+  comment in post.get_comments() %} {% with comment=comment %} {% include
+  'main/_comments.html' %} {% endwith %} {% endfor %} {% endif %}
+</div>
+{% endblock %} {% block right_column %}
+<div class="w3-hide-small w3-margin-top">
+  {% include 'main/_post_widgets.html' %}
+</div>
+{% endblock %}

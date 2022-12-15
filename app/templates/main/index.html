@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block page_content %} {% if form %}
+<div class="w3-row-padding w3-border-bottom w3-margin-bottom">
+  <div class="w3-col m12">
+    <div class="w3-card-0 w3-round">
+      <div class="w3-container w3-padding">
+        <h6 class="w3-opacity w3-margin-top w3-margin-left">
+          {{ form.post.label }}
+        </h6>
+        <form class="w3-container" action="" method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <p>
+            {{ form.post(class="post w3-input w3-border-bottom", id="postForm")
+            }}
+            <label for="postForm"></label>
+            {% for error in form.post.errors %}
+            <span style="color: red">[{{error}}]</span>
+            {% endfor %}
+          </p>
+
+          <button class="w3-button w3-theme w3-right" , type="submit">
+            <i class="fa fa-pencil"></i> Share
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {% for post in posts %} {% include 'main/_post.html' %}
+<hr class="w3-clear" />
+{% endfor %} {% include 'main/_pager.html' %} {% endblock %} {% block
+right_column %}
+<div class="w3-hide-small">
+  {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}
+</div>
+{% endblock %}
+
+<!-- End Middle Column -->

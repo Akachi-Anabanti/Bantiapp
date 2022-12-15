@@ -1,0 +1,71 @@
+<div
+  id="MySidebar"
+  class="my-sidebar w3-bar-block w3-mobile w3-border w3-large"
+  style="width: 15%"
+>
+  <div
+    id="SearchBar"
+    class="w3-sidebar w3-card w3-bar-block w3-border-right w3-round-xlarge"
+    style="display: none"
+  >
+    <div class=" w3-margin">
+      <header class="w3-container w3-margin-bottom">
+        <span onclick="w3_close()" class="w3-button w3-display-topright w3-margin-bottom w3-hover-opacity w3-round-xxlarge", style="font-size: 30px;"
+          >&times;</span
+        >
+      </header>
+      <br>
+      {% if g.search_form %}
+      <form class="w3-margin-top"action="{{ url_for('main.search')}}" method="get">
+        <div>
+          {{ g.search_form.q(size=20, class="w3-bar-item w3-input w3-margin-top w3-border w3-round-xlarge",type="search",
+          placeholder=g.search_form.q.label.text,
+          id="example-search-input")}}
+
+        </div>
+      </form>
+       {% endif %}
+      </div>
+  
+  </div>
+    <h3
+      class="w3-bar-item w3-hide-small"
+      style="font-family: Pethafis; margin-top: 50px; margin-bottom: 30px"
+    >
+      Banti
+    </h3>
+    <a
+      href="{{url_for('main.index')}}"
+      class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      ><i class="fa fa-home w3-margin-right"></i>Home</a
+    >
+    <br />
+    <a
+      href="{{url_for('main.explore')}}"
+      class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      ><i class="fa fa-globe w3-margin-right"></i>Explore</a
+    >
+    <br />
+    <a href="#" class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      ><i class="fa fa-bell-o w3-margin-right"></i>Notifications</a
+    >
+    <br />
+    <a
+      href="#"
+      class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      onclick="w3_open()"
+    >
+      <i class="fa fa-search w3-margin-right"></i>Search
+    </a>
+    <br />
+    <a href="#" class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      ><i class="fa fa-envelope-o w3-margin-right"></i>Message</a
+    >
+    <br />
+    <a
+      href="{{url_for('bp.user', username=current_user.username)}}"
+      class="w3-bar-item w3-button w3-hover-opacity w3-round-xxlarge"
+      ><i class="fa fa-user-o w3-margin-right"></i>Profile</a
+    >
+  </div>
+</div>

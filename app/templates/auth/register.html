@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block left_column %}
+<div>REGISTERATION DESIGN GOES HERE</div>
+{% endblock %}{% block page_content %}
+<div class="row">
+  <div class="justify-content-center">
+    <form class="form-group" action="" method="post" novalidate>
+      <h1 class="text-center">Register</h1>
+      {{ form.hidden_tag() }}
+      <div class="form-floating">
+        {{ form.username(size=16, class="form-control", id="username") }}
+        <label for="#username"> {{ form.username.label }} </label>
+        {% for error in form.username.errors %}
+        <span style="color: red">{{ error }} </span>
+        {% endfor %}
+      </div>
+      <br />
+      <div class="form-floating">
+        {{ form.email(size=16, class="form-control") }}
+        <label for="#email">{{ form.email.label }} </label>
+        {% for error in form.email.errors %}
+        <span style="color: red">{{ error }} </span>
+        {% endfor %}
+      </div>
+      <br />
+      <div class="form-floating">
+        {{ form.password(size=16, class="form-control") }}
+        <label for="#password"> {{ form.password.label }} </label>
+        {% for error in form.password.errors %}
+        <span style="color: red">{{ error }} </span>
+        {% endfor %}
+      </div>
+      <br />
+      <div class="form-floating">
+        {{ form.password2(size=16, class="form-control") }}
+        <label for="#password2"> {{ form.password2.label }} </label>
+        {% for error in form.password2.errors %}
+        <span style="color: red">{{ error }} </span>
+        {% endfor %}
+      </div>
+      <br />
+      <p class="text-center">{{ form.submit( class="btn btn-primary") }}</p>
+    </form>
+  </div>
+</div>
+
+{% endblock %} {% block right_column %}
+<div>MORE REGISTERATION DESIGNS</div>
+{% endblock %}

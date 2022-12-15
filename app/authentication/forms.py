@@ -53,23 +53,6 @@ class RegistrationForm(FlaskForm):
             raise ValidationError("Please use a different email address.")
 
 
-class EditProfileForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    about_me = TextAreaField("About me", validators=[Length(min=0, max=140)])
-    submit = SubmitField("Submit")
-
-    def __init__(self, original_username, *args, **kwargs):
-        super(EditProfileForm, self).__init__(*args, **kwargs)
-        self.original_username = original_username
-
-    def validate_username(self, username):
-        if username.data != self.original_username:
-            user = User.query.filter_by(username=self.username.data).first()
-
-            if user is not None:
-                raise ValidationError(f"Username '{self.username.data}' has been taken")
-
-
 class FileForm(FlaskForm):
     file = FileField(
         "Choose photo",
@@ -81,17 +64,6 @@ class FileForm(FlaskForm):
         ],
     )
     submit = SubmitField("Upload")
-
-
-class EmptyForm(FlaskForm):
-    submit = SubmitField("Submit")
-
-
-class PostForm(FlaskForm):
-    post = TextAreaField(
-        "What is on your mind?", validators=[DataRequired(), Length(min=1, max=200)]
-    )
-    submit = SubmitField("Share")
 
 
 class ResetPasswordRequestForm(FlaskForm):
@@ -107,11 +79,6 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField("Request Password Reset")
 
 
-class CommentForm(FlaskForm):
-    comment = TextAreaField("", validators=[DataRequired(), Length(min=1, max=200)])
-    submit = SubmitField("comment")
-
-
 class SearchForm(FlaskForm):
     q = StringField(label="Search", validators=[DataRequired()])
 
@@ -122,10 +89,3 @@ class SearchForm(FlaskForm):
             kwargs["meta"] = {"csrf": False}
 
         super(SearchForm, self).__init__(*args, **kwargs)
-
-
-class MessageForm(FlaskForm):
-    message = TextAreaField(
-        label="Message", validators=[DataRequired(), Length(min=0, max=140)]
-    )
-    submit = SubmitField("Send")

@@ -22,7 +22,7 @@
   <div>
     <div class="footer">
       {% if not current_user.is_anonymous %} {% if not current_user.liked(post)
-      %}
+      %} {% if g.empty_form %} {{ form.hidden_tag() }}
       <form action="{{ url_for('like', post_id=post.id)}}" method="post">
         <button
           type="submit"
@@ -41,7 +41,7 @@
           <span class="badge bg-secondary">{{post.likes.count()}}</span>
         </button>
       </form>
-      {% endif %}
+      {% endif %} {% endif %}
       <small>{{post.comments.count()}} Comments</small>
       <a href="{{url_for('post_detail', id=post.id)}}">Expand</a>
       {% endif %}

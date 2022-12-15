@@ -1,0 +1,176 @@
+<div
+  class="w3-hover-opacity w3-hover-opacity w3-round w3-margin"
+  style="transform: rotate(0)"
+>
+  <div class="">
+    <div class="w3-row w3-margin-left">
+      <img
+        id="PostImage-{{post.id}}"
+        src="{{ url_for('main.serve_photo', username=post.author.username)}}"
+        alt="Avatar"
+        class="w3-left w3-circle w3-margin-right w3-margin-top"
+        style="width: 35px"
+      />
+      <span
+        id="PostTime-{{post.id}}"
+        class="w3-right w3-opacity w3-margin-top w3-margin-right"
+        >{{ moment(post.timestamp).fromNow(refresh=True)}}</span
+      >
+      <h4 class="w3-margin-top">
+        <a
+          id="PostAuthor-{{post.id}}"
+          href="{{ url_for('bp.user', username=post.author.username )}}"
+          style="position: relative; z-index: 1000"
+          class="w3-margin-top"
+          >{{post.author.username}}</a
+        >
+      </h4>
+    </div>
+
+    <hr class="w3-clear" />
+    <div class="w3-row w3-margin-left">
+      <p id="PostBody-{{post.id}}">{{post.body}}</p>
+
+      <span id="PostTimeLong-{{post.id}}" class="text-muted w3-hide"
+        >{{ moment(post.timestamp).format('LLL')}}</span
+      >
+    </div>
+
+    <!-- <div class="w3-row-padding" style="margin: 0 -16px">
+      <!for loop here to render photo
+      <div class="w3-half">
+        <img
+          src="{{ url_for('main.serve_photo', username=post.author.username)}}/?photo_id{{post.photo}}"
+          style="width: 100%"
+          alt=""
+          class="w3-margin-bottom"
+        />
+      </div>
+      < end for loop here>
+    </div> -->
+    {% if current_user.is_authenticated %}
+    <div class="w3-bar">
+      {% if g.empty_form %} {{ g.empty_form.hidden_tag() }} {% if not
+      current_user.liked(post) %}
+
+      <form
+        class="w3-button"
+        action="{{ url_for('main.like', post_id=post.id)}}"
+        method="post"
+        style="position: relative; z-index: 10000"
+      >
+        <button type="submit" value="Like" class="w3-border-0 w3-button">
+          <i class="fa fa-thumbs-up" style="font-size: 20px"></i>
+          {{post.likes.count()}}
+        </button>
+      </form>
+      {% else %}
+      <form
+        class="w3-button"
+        action="{{ url_for('main.unlike', post_id=post.id)}}"
+        method="post"
+        style="position: relative; z-index: 10000"
+      >
+        <button type="submit" value="Unlike" class="w3-border-0 w3-button">
+          <i class="fa fa-thumbs-down" style="font-size: 20px"></i>
+          {{post.likes.count()}}
+        </button>
+      </form>
+      {% endif %} {% endif %}
+
+      <button
+        id="comment-button-{{post.id}}"
+        type="submit"
+        class="w3-border-0 w3-button"
+        style="position: relative; z-index: 10000"
+        onclick="setModalPost({{post.id}})"
+      >
+        <i class="fa fa-comment" style="font-size: 20px"></i> {{
+        post.comments.count() }}
+      </button>
+      <button class="w3-button">
+        <i class="fa fa-share" style="font-size: 20px"></i>
+      </button>
+      <button class="w3-button">
+        <i class="fa fa-bell" style="font-size: 20px"></i>
+      </button>
+    </div>
+    {% endif %}
+  </div>
+  <a
+    id="PostUrl-{{post.id}}"
+    class="stretched-link"
+    href="{{url_for('main.post_detail', id=post.id)}}"
+  ></a>
+</div>
+
+<!-- COMMENT MODAL SECTION -->
+<div id="modalComment-{{post.id}}" class="w3-modal">
+  <div class="w3-row-padding">
+    <div class="w3-col m12 w3-margin-top">
+      <div
+        class="w3-card w3-round-xlarge w3-modal-content w3-round w3-white"
+        style="max-width: 500px"
+      >
+        <header class="w3-container w3-margin-bottom w3-round-xlarge">
+          <span
+            onclick="document.getElementById('modalComment-{{post.id}}').style.display='none'"
+            class="w3-button w3-display-topright"
+            >&times;</span
+          >
+        </header>
+        <br />
+        <div class="w3-margin">
+          <img
+            id="modalPostImage-{{post.id}}"
+            src=""
+            alt="Avatar"
+            class="w3-left w3-circle w3-margin-right"
+            style="width: 30px"
+          />
+
+          <span
+            id="modalPostTime-{{post.id}}"
+            class="w3-right w3-opacity"
+          ></span>
+          <h4>
+            <a
+              id="modalPostAuthor-{{post.id}}"
+              class=""
+              href=""
+              style="position: relative"
+            ></a>
+          </h4>
+          <hr class="w3-clear" />
+
+          <p id="modalPostBody-{{post.id}}" class=""></p>
+          <span id="modalPostTimeLong-{{post.id}}" class="text-muted"></span>
+          <p class="text-muted">
+            Replying to
+            <a id="_modalPostAuthor-{{post.id}}" href=""></a>
+          </p>
+        </div>
+        <div class="w3-container w3-padding w3-margin-top">
+          <form id="ModalCommentForm-{{post.id}}" action="" method="post">
+            <p>
+              <textarea
+                name="post-comment"
+                id=""
+                class="post w3-input w3-border-bottom"
+                placeholder="Write your comment"
+                maxlength="200"
+                minlength="1"
+                required
+              ></textarea>
+            </p>
+            <p>
+              <button class="w3-button w3-theme" type="submit">
+                <i class="fa fa-comment"></i> Comment
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

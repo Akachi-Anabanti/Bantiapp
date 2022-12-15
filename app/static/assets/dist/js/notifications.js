@@ -5,8 +5,16 @@ $(function () {
       notifications
     ) {
       for (let i = 0; i < notifications.length; i++) {
-        if (notifications[i].name == "unread_message_count") {
-          set_message_count(notifications[i].data);
+        switch (notifications[i].name) {
+          case "unread_message_count":
+            set_message_count(notifications[i].data);
+            break;
+          case "task_progress":
+            set_task_progess(
+              notifications[i].data.task_id,
+              notifications[i].data.progress
+            );
+            break;
         }
         since = notifications[i].timestamp;
       }

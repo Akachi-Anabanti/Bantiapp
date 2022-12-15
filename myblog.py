@@ -1,6 +1,7 @@
-from app import app, db
-from app.models import User, Post, Comment, Message, Notification
+from app import create_app, db
+from app.models import User, Post, Comment, Message, Notification, Task
 
+app = create_app()
 
 @app.shell_context_processor
 def make_shell_context():
@@ -11,4 +12,5 @@ def make_shell_context():
         "Comment": Comment,
         "Message": Message,
         "Notification": Notification,
+        "Task": Task,
     }

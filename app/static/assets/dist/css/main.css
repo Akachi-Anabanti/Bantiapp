@@ -1,0 +1,101 @@
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Open Sans", sans-serif;
+}
+.post {
+  resize: none;
+  height: 100px;
+}
+textarea:focus {
+  outline: none;
+}
+
+.my-sidebar {
+  margin: 0;
+  padding: 0;
+  width: 25px;
+  background-color: #fff;
+  position: fixed !important;
+  height: 100%;
+  overflow: auto;
+  z-index: 1;
+}
+div.main-content {
+  margin-left: 20%;
+}
+
+@media (max-width: 1200px) {
+  .my-sidebar a {
+    font-size: 0px !important;
+  }
+
+  .my-sidebar a i {
+    font-size: 27px !important;
+    text-align: center;
+  }
+  .my-sidebar {
+    width: 160px;
+  }
+  .my-sidebar h3 {
+    font-size: 0px !important;
+  }
+}
+.my-sidebar a i {
+  font-size: 25px;
+}
+
+.my-sidebar a:visited {
+  text-decoration: none;
+}
+
+.my-sidebar a:hover {
+  text-decoration: none;
+}
+.my-sidebar a:hover i {
+  font-size: 25.5px;
+}
+
+.my-sidebar a:link {
+  text-decoration: none;
+}
+/* On screens that are less than 700px wide, make the sidebar into a topbar */
+@media screen and (max-width: 580px) {
+  /* .my-sidebar {
+    overflow: hidden;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+  } */
+  .w3-bar-block {
+    display: inline-flex;
+    width: 100%;
+    height: 10%;
+    position: sticky;
+    bottom: 0;
+    overflow: hidden;
+    align-items: center;
+    justify-content: left;
+    margin-right: 0;
+  }
+
+  .my-sidebar a i {
+    float: left;
+  }
+  div.w3-container {
+    margin-left: 0;
+    margin-bottom: 20%;
+  }
+}
+
+/* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+@media screen and (max-width: 400px) {
+  .my-sidebar a {
+    text-align: center;
+    float: none;
+  }
+}

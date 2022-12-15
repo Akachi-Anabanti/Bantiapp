@@ -1,0 +1,7 @@
+{% extends '../base.html' %} {% block page_content %}
+<h4 class="text-center">Messages</h4>
+<div class="mx-2 card"></div>
+{% for post in messages %}
+<div class="mb-2 card-body">{% include '_messages.html' %}</div>
+
+{% endfor %} {% include "_pager.html" %} {% endblock %}

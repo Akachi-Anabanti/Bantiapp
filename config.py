@@ -1,6 +1,9 @@
 import os
+from dotenv import load_dotenv
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, ".env"))
 
 
 class Config(object):
@@ -25,3 +28,28 @@ class Config(object):
     ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL")
     ELASTICSEARCH_USERNAME = os.environ.get("ELASTICSEARCH_USERNAME")
     HTTP_CERT = os.path.join(basedir, "http_ca.crt")
+    REDIS_URL = os.environ.get("REDIS_URL") or "redis://"
+    PUSHER_APP_ID = os.environ.get("PUSHER_APP_ID")
+    PUSHER_SECRET = os.environ.get("PUSHER_SECRET")
+    PUSHER_KEY = os.environ.get("PUSHER_KEY")
+    PUSHER_CLUSTER = os.environ.get("PUSHER_CLUSTER")
+
+
+class DevelopmentConfig(Config):
+    pass
+
+
+class TestingConfig(Config):
+    pass
+
+
+class ProductionConfig(Config):
+    pass
+
+
+config = {
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "production": ProductionConfig,
+    "default": DevelopmentConfig,
+}
