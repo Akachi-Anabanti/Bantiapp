@@ -1,0 +1,96 @@
+2022-12-29 11:07:12,965 ERROR: Exception on /index [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 68, in index
+    return render_template(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\index.html", line 1, in top-level template code
+    {% extends 'base.html' %} {% block page_content %} {% if form %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\base.html", line 87, in top-level template code
+    {% include 'main/_sidebar_home.html' %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\_sidebar_home.html", line 74, in top-level template code
+    {{g.post_form.post(class="post w3-input w3-border-bottom",
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\fields\core.py", line 172, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\meta.py", line 64, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_pagedown\widgets.py", line 43, in __call__
+    html += Markup(pagedown_pre_html) + super(PageDown, self).__call__(
+TypeError: __call__() got multiple values for keyword argument 'id'
+2022-12-29 11:20:45,149 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 11:20:50,219 ERROR: Exception on /index [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1808, in _execute_context
+    self.dialect.do_execute(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such column: post.body_html
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 62, in index
+    posts = current_user.followed_posts().paginate(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_sqlalchemy\__init__.py", line 534, in paginate
+    items = self.limit(per_page).offset((page - 1) * per_page).all()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\query.py", line 2759, in all
+    return self._iter().all()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 1692, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1620, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\sql\elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1487, in _execute_clauseelement
+    ret = self._execute_context(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1851, in _execute_context
+    self._handle_dbapi_exception(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 2032, in _handle_dbapi_exception
+    util.raise_(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
+    raise exception
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1808, in _execute_context
+    self.dialect.do_execute(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such column: post.body_html
+[SQL: SELECT anon_1.post_pid AS anon_1_post_pid, anon_1.post_id AS anon_1_post_id, anon_1.post_body AS anon_1_post_body, anon_1.post_timestamp AS anon_1_post_timestamp, anon_1.post_user_id AS anon_1_post_user_id, anon_1.post_body_html AS anon_1_post_body_html 
+FROM (SELECT post.pid AS post_pid, post.id AS post_id, post.body AS post_body, post.timestamp AS post_timestamp, post.user_id AS post_user_id, post.body_html AS post_body_html 
+FROM post JOIN followers ON followers.followed_id = post.user_id 
+WHERE followers.follower_id = ? UNION SELECT post.pid AS post_pid, post.id AS post_id, post.body AS post_body, post.timestamp AS post_timestamp, post.user_id AS post_user_id, post.body_html AS post_body_html 
+FROM post 
+WHERE post.user_id = ?) AS anon_1 ORDER BY anon_1.post_timestamp DESC
+ LIMIT ? OFFSET ?]
+[parameters: (4, 4, 20, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-12-29 11:21:36,282 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 11:22:00,628 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 11:22:12,028 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68

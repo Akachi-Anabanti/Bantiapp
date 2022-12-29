@@ -1,18 +1,20 @@
 from datetime import datetime, timedelta
 import unittest
-from app import app, db
+from app import create_app, db
 from app.models import User, Post
 
 
 class UserModelCase(unittest.TestCase):
     def setUp(self) -> None:
-        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
+        self.app = create_app("testing")
+        self.app_context = self.app.app_context()
+        self.app_context.push()
         db.create_all()
 
     def tearDown(self) -> None:
         db.session.remove()
-        db.drop_all()
-        return super().tearDown()
+        db.drop_all
+        self.app_context.pop()
 
     def test_password_hashing(self):
         u = User(username="susan")
@@ -95,7 +97,3 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(f2, [p2, p3])
         self.assertEqual(f3, [p3, p4])
         self.assertEqual(f4, [p4])
-
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)

@@ -161,7 +161,8 @@
     {% endblock %}
 
     <br />
-    {% block script %} {{ moment.include_moment() }}
+    {% block scripts %} {{ moment.include_moment() }}
+
     <script
       async
       src="https://platform.twitter.com/widgets.js"
@@ -182,6 +183,7 @@
       integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
       crossorigin="anonymous"
     ></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script> -->
 
     <script src="../static/assets/dist/js/reply.js"></script>
     <script src="../static/assets/dist/js/message.js"></script>
@@ -293,7 +295,7 @@
         var elem = $(event.currentTarget);
         html = `<div id="userMenuOptions" class="w3-display-container">
                 <div class="w3-bar-block" >
-                  <a href="" class="w3-bar-item" style="text-decoration:none" > <i class="fa fa-lightbulb-o fa-fw"></i> Activites</a>
+                  <a href="/activities" class="w3-bar-item" style="text-decoration:none" > <i class="fa fa-lightbulb-o fa-fw"></i> Activites</a>
           
                 </div>
                 <hr class="w3-clear" />

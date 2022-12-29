@@ -444,3 +444,8 @@ def userfollowers(username):
             form=form,
         )
     return redirect(url_for("main.index"))
+
+
+@main.route("/activities")
+def activities():
+    return render_template("main/activities.html")

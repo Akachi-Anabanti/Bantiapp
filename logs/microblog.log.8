@@ -1,0 +1,108 @@
+2022-12-29 10:59:58,883 ERROR: Exception on /index [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 68, in index
+    return render_template(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\index.html", line 1, in top-level template code
+    {% extends 'base.html' %} {% block page_content %} {% if form %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\base.html", line 87, in top-level template code
+    {% include 'main/_sidebar_home.html' %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\_sidebar_home.html", line 74, in top-level template code
+    {{g.post_form.post(class="post w3-input w3-border-bottom",
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\fields\core.py", line 172, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\meta.py", line 64, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_pagedown\widgets.py", line 43, in __call__
+    html += Markup(pagedown_pre_html) + super(PageDown, self).__call__(
+TypeError: __call__() got multiple values for keyword argument 'id'
+2022-12-29 11:02:29,468 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 11:02:37,555 ERROR: Exception on /index [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 68, in index
+    return render_template(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\index.html", line 1, in top-level template code
+    {% extends 'base.html' %} {% block page_content %} {% if form %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\base.html", line 87, in top-level template code
+    {% include 'main/_sidebar_home.html' %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\_sidebar_home.html", line 74, in top-level template code
+    {{g.post_form.post(class="post w3-input w3-border-bottom",
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\fields\core.py", line 172, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\meta.py", line 64, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_pagedown\widgets.py", line 43, in __call__
+    html += Markup(pagedown_pre_html) + super(PageDown, self).__call__(
+TypeError: __call__() got multiple values for keyword argument 'id'
+2022-12-29 11:04:44,044 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 11:04:50,915 ERROR: Exception on /index [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
+    return func(*args, **kwargs)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 68, in index
+    return render_template(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\index.html", line 1, in top-level template code
+    {% extends 'base.html' %} {% block page_content %} {% if form %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\base.html", line 87, in top-level template code
+    {% include 'main/_sidebar_home.html' %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\_sidebar_home.html", line 74, in top-level template code
+    {{g.post_form.post(class="post w3-input w3-border-bottom",
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\fields\core.py", line 172, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\meta.py", line 64, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_pagedown\widgets.py", line 43, in __call__
+    html += Markup(pagedown_pre_html) + super(PageDown, self).__call__(
+TypeError: __call__() got multiple values for keyword argument 'id'
+2022-12-29 11:07:06,695 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68

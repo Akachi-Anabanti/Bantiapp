@@ -9,10 +9,8 @@
         <form class="w3-container" action="" method="post" novalidate>
           {{ form.hidden_tag() }}
           <p>
-            {{ form.post(class="post w3-input w3-border-bottom", id="postForm")
-            }}
-            <label for="postForm"></label>
-            {% for error in form.post.errors %}
+            {{ form.post(class="post w3-input w3-border-bottom",) }} {% for
+            error in form.post.errors %}
             <span style="color: red">[{{error}}]</span>
             {% endfor %}
           </p>
@@ -32,6 +30,6 @@ right_column %}
 <div class="w3-hide-small">
   {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}
 </div>
-{% endblock %}
-
+{% endblock %}{% block scripts %} {{ super() }} {{ pagedown.include_pagedown()
+}} {% endblock %}
 <!-- End Middle Column -->

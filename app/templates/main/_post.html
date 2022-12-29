@@ -14,10 +14,7 @@
           class="w3-opacity w3-margin-top w3-margin-right"
           >{{ moment(post.timestamp).fromNow(refresh=True)}}</span
         >
-        <a
-          class=""
-          href="{{url_for('bp.user', username=post.author.username)}}"
-          style="z-index: 1; position: relative"
+        <a class="" href="{{url_for('bp.user', username=post.author.username)}}"
           ><i class="fa fa-ellipsis-v w3-margin-top w3-margin-right"></i
         ></a>
       </div>
@@ -31,12 +28,7 @@
           <a
             id="PostAuthor-{{post.id}}"
             href="{{ url_for('bp.user', username=post.author.username )}}"
-            style="
-              position: relative;
-              z-index: 10;
-              font-size: medium;
-              text-decoration: none;
-            "
+            style="font-size: medium; text-decoration: none"
             class="w3-margin-top"
             >{{post.author.username}}</a
           >
@@ -47,7 +39,10 @@
     <br />
 
     <div class="w3-row w3-margin-left">
-      <p id="PostBody-{{post.id}}">{{post.body}}</p>
+      <p class="" id="PostBody-{{post.id}}">
+        {% if post.body_html %} {{ post.body_html | safe }} {% else %} {{
+        post.body }} {% endif %}
+      </p>
 
       <span id="PostTimeLong-{{post.id}}" class="text-muted w3-hide"
         >{{ moment(post.timestamp).format('LLL')}}</span
@@ -63,7 +58,6 @@
         class="w3-button w3-hover-white"
         action="{{ url_for('main.like', post_id=post.id)}}"
         method="post"
-        style="position: relative; z-index: 1000"
       >
         <button
           type="submit"
@@ -79,7 +73,6 @@
         class="w3-button w3-hover-white"
         action="{{ url_for('main.unlike', post_id=post.id)}}"
         method="post"
-        style="position: relative; z-index: 1000"
       >
         <button
           type="submit"
@@ -96,28 +89,28 @@
         id="comment-button-{{post.id}}"
         type="submit"
         class="w3-border-0 w3-button w3-hover-white"
-        style="position: relative; z-index: 1000"
         onclick="setModalPost({{post.id}})"
       >
         <i class="fa fa-comment" style="font-size: 15px"></i> {{
         post.comments.count() }}
       </button>
-
-      <a
-        class="w3-button w3-right w3-hover-white w3-margin-top"
-        style="position: relative; z-index: 1000"
-        href=""
-      >
-        <i class="fa fa-share" style="font-size: 15px"></i>
-      </a>
+      <div class="w3-right w3-tooltip">
+        <a
+          id="PostUrl-{{post.id}}"
+          class="w3-button w3-border-0 w3-hover-white"
+          href="{{url_for('main.post_detail', _id=post.pid)}}"
+        >
+          <i class="fa fa-level-down" style="font-size: 15px"></i>
+        </a>
+        <span
+          style="position: absolute; right: 0; bottom: 18px"
+          class="w3-text w3-tag w3-round w3-small"
+          >details</span
+        >
+      </div>
     </div>
     {% endif %}
   </div>
-  <a
-    id="PostUrl-{{post.id}}"
-    class="stretched-link"
-    href="{{url_for('main.post_detail', _id=post.pid)}}"
-  ></a>
 </div>
 
 <!-- COMMENT MODAL SECTION -->

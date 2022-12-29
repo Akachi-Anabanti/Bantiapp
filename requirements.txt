@@ -10,6 +10,7 @@ Babel==2.11.0
 backports.zoneinfo==0.2.1
 beautifulsoup4==4.11.1
 billiard==3.6.4.0
+bleach==5.0.1
 blinker==1.4
 browser-cookie3==0.16.1
 bs4==0.0.1
@@ -44,10 +45,12 @@ Flask-Login==0.5.0
 Flask-Mail==0.9.1
 Flask-Migrate==3.1.0
 Flask-Moment==1.0.5
+Flask-PageDown==0.4.0
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.5.1
 Flask-SSLify==0.1.5
 Flask-WTF==1.0.0
+FlaskPusher==1.0.1
 greenlet==1.1.2
 gunicorn==20.1.0
 h11==0.13.0
@@ -65,6 +68,7 @@ kombu==5.2.4
 lxml==4.9.1
 lz4==4.0.1
 Mako==1.2.0
+Markdown==3.4.1
 MarkupSafe==2.1.1
 multidict==6.0.2
 ndg-httpsclient==0.5.1
@@ -127,7 +131,9 @@ tzlocal==4.2
 urllib3==1.26.9
 vine==5.0.0
 w3lib==1.22.0
+waitress==2.1.2
 wcwidth==0.2.5
+webencodings==0.5.1
 websockets==10.3
 Werkzeug==2.0.3
 wrapt==1.14.0

@@ -12,6 +12,7 @@ from wtforms import (
 
 from flask import request
 from flask_babel import lazy_gettext as _l
+from flask_pagedown.fields import PageDownField
 
 
 class MessageForm(FlaskForm):
@@ -22,14 +23,14 @@ class MessageForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    post = TextAreaField(
-        "What is on your mind?", validators=[DataRequired(), Length(min=1, max=200)]
+    post = PageDownField(
+        "What is on your mind?", validators=[DataRequired(), Length(min=1, max=300)]
     )
     submit = SubmitField("Share")
 
 
 class CommentForm(FlaskForm):
-    comment = TextAreaField("", validators=[DataRequired(), Length(min=1, max=200)])
+    comment = PageDownField("", validators=[DataRequired(), Length(min=1, max=200)])
     submit = SubmitField("comment")
 
 

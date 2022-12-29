@@ -28,7 +28,7 @@ def before_request():
 
 
 @bp.route("/<username>")
-# @login_required
+@login_required
 def user(username):
     prev = request.referrer
     g.prev = prev
@@ -182,5 +182,8 @@ def users_recommended():
     for _user in users:
         if current_user.is_following(_user) or _user.is_following(current_user):
             users.remove(_user)
-    user = random.choices(users, k=4)
+    if users != []:
+        users = random.choices(users)
+    else:
+        users = []
     return render_template("user/user_recommended.html", users=users, form=form)

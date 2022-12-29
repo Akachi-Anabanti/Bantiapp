@@ -27,7 +27,7 @@ $(function () {
         holidayImage.style.width = "100%";
         holidayImage.style.height = "50%";
         holidayImage.alt = response[i].name;
-        dayOfHoliday.innerText = moment(holiday).format("LL");
+        dayOfHoliday.innerText = moment(holiday).fromNow();
         break;
       }
     }

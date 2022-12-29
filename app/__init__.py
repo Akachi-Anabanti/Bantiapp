@@ -1,20 +1,20 @@
 from flask import Flask
-from config import Config
+from config import config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from elasticsearch import Elasticsearch
-from app.extensions import db, migrate, login, mail, bable, moment, pusher
+from app.extensions import db, migrate, login, mail, bable, moment, pusher, pagedown
 from redis import Redis
 import rq
-from pusher import Pusher
 
 
-def create_app(config_class=Config):
+def create_app(config_name):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
 
-    # Extension initialization
+    # Extensions initialization
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -22,6 +22,7 @@ def create_app(config_class=Config):
     mail.init_app(app)
     moment.init_app(app)
     bable.init_app(app)
+    pagedown.init_app(app)
     pusher.init_app(
         app,
         app_id=app.config["PUSHER_APP_ID"],
@@ -81,13 +82,6 @@ def create_app(config_class=Config):
 
     app.redis = Redis.from_url(app.config["REDIS_URL"])
     app.task_queue = rq.Queue("microblog-tasks", connection=app.redis)
-    # app.pusher = Pusher(
-    #     app_id=app.config["PUSHER_APP_ID"],
-    #     key=app.config["PUSHER_KEY"],
-    #     secret=app.config["PUSHER_SECRET"],
-    #     cluster=app.config["PUSHER_CLUSTER"],
-    #     ssl=True,
-    # )
 
     from app.authentication import auth as auth_blueprint
 
@@ -98,7 +92,7 @@ def create_app(config_class=Config):
     from app.user import bp as user_bp
 
     app.register_blueprint(user_bp, url_prefix="/user")
-    from app.errors import bp as error_bp
+    from app.errors import err as error_bp
 
     app.register_blueprint(error_bp)
     from app.feed import fd as feed_blueprint

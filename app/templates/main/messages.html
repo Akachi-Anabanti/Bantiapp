@@ -1,8 +1,11 @@
 {% extends 'base.html' %} {% block page_content %}
+<br />
 <h4 class="text-center">Messages</h4>
 <div class="w3-card"></div>
 {% for message in messages %}
 <div class="">{% include 'main/_messages.html' %}</div>
 
 {% endfor %} {% include "main/_pager.html" %}{% endblock %} {% block
-right_column %} {% include 'main/_post_widgets.html' %} {% endblock%}
+right_column %}
+<div class="w3-hide-small">{% include 'main/_post_widgets.html' %}</div>
+{% endblock%}

@@ -65,16 +65,15 @@
           class="w3-button w3-display-topright"
           >&times;</span
         >
+        {% if g.post_form %}
         <h6 class="w3-opacity w3-margin-top w3-margin-left">
           {{ g.post_form.post.label }}
         </h6>
         <form class="w3-container" action="" method="post">
           {{ g.post_form.hidden_tag() }}
           <p>
-            {{g.post_form.post(class="post w3-input w3-border-bottom",
-            id="postForm") }}
-            <label for="postForm"></label>
-            {% for error in g.post_form.post.errors %}
+            {{g.post_form.post(class="post w3-input w3-border-bottom", ) }} {%
+            for error in g.post_form.post.errors %}
             <span style="color: red; font-style: italic">{{error}}</span>
             {% endfor %}
           </p>
@@ -83,6 +82,7 @@
             <i class="fa fa-pencil"></i> Share
           </button>
         </form>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -1,14 +1,4 @@
-2022-11-20 18:49:49,261 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:52
-2022-11-20 18:50:12,980 ERROR: Exception on /edit_profile [POST] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
-Traceback (most recent call last):
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1808, in _execute_context
-    self.dialect.do_execute(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
-    cursor.execute(statement, parameters)
-sqlite3.IntegrityError: UNIQUE constraint failed: user.username
-
-The above exception was the direct cause of the following exception:
-
+2022-12-29 11:22:24,881 ERROR: Exception on / [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
 Traceback (most recent call last):
   File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
     response = self.full_dispatch_request()
@@ -20,52 +10,92 @@ Traceback (most recent call last):
     return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
   File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_login\utils.py", line 272, in decorated_view
     return func(*args, **kwargs)
-  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\routes.py", line 84, in edit_profile
-    db.session.commit()
-  File "<string>", line 2, in commit
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 1431, in commit
-    self._transaction.commit(_to_root=self.future)
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 829, in commit
-    self._prepare_impl()
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 808, in _prepare_impl
-    self.session.flush()
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 3363, in flush
-    self._flush(objects)
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 3503, in _flush
-    transaction.rollback(_capture_exception=True)
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 70, in __exit__
-    compat.raise_(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
-    raise exception
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\session.py", line 3463, in _flush
-    flush_context.execute()
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 456, in execute
-    rec.execute(self)
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 630, in execute
-    util.preloaded.orm_persistence.save_obj(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\persistence.py", line 236, in save_obj
-    _emit_update_statements(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1000, in _emit_update_statements
-    c = connection._execute_20(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1620, in _execute_20
-    return meth(self, args_10style, kwargs_10style, execution_options)
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\sql\elements.py", line 325, in _execute_on_connection
-    return connection._execute_clauseelement(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1487, in _execute_clauseelement
-    ret = self._execute_context(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1851, in _execute_context
-    self._handle_dbapi_exception(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 2032, in _handle_dbapi_exception
-    util.raise_(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\util\compat.py", line 207, in raise_
-    raise exception
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\base.py", line 1808, in _execute_context
-    self.dialect.do_execute(
-  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\sqlalchemy\engine\default.py", line 732, in do_execute
-    cursor.execute(statement, parameters)
-sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: user.username
-[SQL: UPDATE user SET username=?, about_me=? WHERE user.id = ?]
-[parameters: ('Gradle', 'A genius A wealthy Man', 3)]
-(Background on this error at: https://sqlalche.me/e/14/gkpj)
-2022-11-20 18:51:13,345 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:52
-2022-11-20 18:51:44,439 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:52
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\main\routes.py", line 68, in index
+    return render_template(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\index.html", line 1, in top-level template code
+    {% extends 'base.html' %} {% block page_content %} {% if form %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\base.html", line 87, in top-level template code
+    {% include 'main/_sidebar_home.html' %}
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\main\_sidebar_home.html", line 74, in top-level template code
+    {{g.post_form.post(class="post w3-input w3-border-bottom",
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\fields\core.py", line 172, in __call__
+    return self.meta.render_field(self, kwargs)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\wtforms\meta.py", line 64, in render_field
+    return field.widget(field, **render_kw)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask_pagedown\widgets.py", line 43, in __call__
+    html += Markup(pagedown_pre_html) + super(PageDown, self).__call__(
+TypeError: __call__() got multiple values for keyword argument 'id'
+2022-12-29 16:44:36,674 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 16:45:51,029 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 16:52:16,731 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 16:56:10,805 ERROR: Exception on /message/9089 [GET] [in c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py:1457
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1492, in dispatch_request
+    self.raise_routing_exception(req)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1474, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\ctx.py", line 376, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\werkzeug\routing.py", line 2042, in match
+    raise NotFound()
+werkzeug.exceptions.NotFound: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1386, in handle_user_exception
+    return self.handle_http_exception(e)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\app.py", line 1326, in handle_http_exception
+    return self.ensure_sync(handler)(e)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\errors\handlers.py", line 8, in not_found_error
+    return render_template("errors/404.html"), 404
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 147, in render_template
+    return _render(
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 128, in _render
+    rv = template.render(context)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\jinja2\environment.py", line 925, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\templates\errors\404.html", line 1, in top-level template code
+    {% extends "../base.html" %} {% block page_content %}
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 59, in get_source
+    return self._get_source_fast(environment, template)
+  File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\flask\templating.py", line 95, in _get_source_fast
+    raise TemplateNotFound(template)
+jinja2.exceptions.TemplateNotFound: ../base.html
+2022-12-29 16:57:42,061 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:00:34,421 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:01:46,432 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:02:58,548 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:04:24,002 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:05:14,822 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:06:56,354 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:07:45,353 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:09:57,885 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:14:35,014 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:34:49,314 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:35:57,965 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 17:36:35,254 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 18:06:06,370 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 18:18:37,474 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 18:36:02,913 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 18:49:11,469 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 18:54:26,217 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 19:09:17,689 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 19:36:13,931 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-29 19:37:30,049 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68

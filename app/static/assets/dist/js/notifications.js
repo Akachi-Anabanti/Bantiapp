@@ -34,8 +34,11 @@ $(function () {
   setInterval(function () {
     //USERS TO FOLLOW LOADER
     $.ajax("/user/users-recommended").done(function (data) {
-      document.getElementById("people-know").style.display = "block";
-      document.getElementById("recommended-users").innerHTML = data;
+      if (data.length === 0) {
+      } else {
+        document.getElementById("people-know").style.display = "block";
+        document.getElementById("recommended-users").innerHTML = data;
+      }
     });
 
     //Activity suggestion API

@@ -8,9 +8,7 @@ load_dotenv(os.path.join(basedir, ".env"))
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "a892d34c873011edb8225c3a4547d4d8"
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URI"
-    ) or "sqlite:///" + os.path.join(basedir, "app.db")
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
@@ -19,6 +17,7 @@ class Config(object):
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("SENDGRID_API_KEY")
     ADMINS = ["akachi.anabanti@outlook.com"]
+    MAIL_DEFAULT_SENDER = ADMINS[0]
     POST_PER_PAGE = 20
     COMMENTS_PER_PAGE = 5
     ELASTICSEARCH_PASSWORD = os.environ.get("ELASTICSEARCH_PASSWORD")
@@ -31,16 +30,31 @@ class Config(object):
     PUSHER_KEY = os.environ.get("PUSHER_KEY")
     PUSHER_CLUSTER = os.environ.get("PUSHER_CLUSTER")
 
+    @staticmethod
+    def init_app(app):
+        # used to initialize the coonfig in create_app()
+        pass
+
 
 class DevelopmentConfig(Config):
-    pass
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DEV_DATABASE_URI"
+    ) or "sqlite:///" + os.path.join(basedir, "data-dev.sqlite")
 
 
 class TestingConfig(Config):
-    pass
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get("TEST_DATABASE_URI") or "sqlite://"
 
 
 class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = os.environ.get(
+        "DATABASE_URI"
+    ) or "sqlite:///" + os.path.join(basedir, "app.db")
+
+
+class HerokuConfig(ProductionConfig):
     pass
 
 
@@ -49,4 +63,5 @@ config = {
     "testing": TestingConfig,
     "production": ProductionConfig,
     "default": DevelopmentConfig,
+    "heroku": HerokuConfig,
 }
