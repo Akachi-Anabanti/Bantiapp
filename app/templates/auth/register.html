@@ -1,48 +1,73 @@
-{% extends "base.html" %} {% block left_column %}
-<div>REGISTERATION DESIGN GOES HERE</div>
-{% endblock %}{% block page_content %}
-<div class="row">
-  <div class="justify-content-center">
-    <form class="form-group" action="" method="post" novalidate>
-      <h1 class="text-center">Register</h1>
-      {{ form.hidden_tag() }}
-      <div class="form-floating">
-        {{ form.username(size=16, class="form-control", id="username") }}
-        <label for="#username"> {{ form.username.label }} </label>
-        {% for error in form.username.errors %}
-        <span style="color: red">{{ error }} </span>
-        {% endfor %}
-      </div>
-      <br />
-      <div class="form-floating">
-        {{ form.email(size=16, class="form-control") }}
-        <label for="#email">{{ form.email.label }} </label>
-        {% for error in form.email.errors %}
-        <span style="color: red">{{ error }} </span>
-        {% endfor %}
-      </div>
-      <br />
-      <div class="form-floating">
-        {{ form.password(size=16, class="form-control") }}
-        <label for="#password"> {{ form.password.label }} </label>
-        {% for error in form.password.errors %}
-        <span style="color: red">{{ error }} </span>
-        {% endfor %}
-      </div>
-      <br />
-      <div class="form-floating">
-        {{ form.password2(size=16, class="form-control") }}
-        <label for="#password2"> {{ form.password2.label }} </label>
-        {% for error in form.password2.errors %}
-        <span style="color: red">{{ error }} </span>
-        {% endfor %}
-      </div>
-      <br />
-      <p class="text-center">{{ form.submit( class="btn btn-primary") }}</p>
-    </form>
+{% extends "base.html" %} {% block left_column %} {% endblock %}{% block content
+%}
+<div class="registration-container">
+  <form
+    id=""
+    class="w3-container w3-round w3-border"
+    action=""
+    method="post"
+    novalidate
+  >
+    <h6 class="text-center w3-margin w3-teal">
+      Please fill this form to register
+    </h6>
+    {{ form.hidden_tag() }}
+    <label for="#username"> {{ form.fullname.label }} </label>
+    {{ form.fullname(size=16, class="w3-input w3-border w3-round",
+    id="fullname") }} {% for error in form.fullname.errors %}
+    <span style="color: red">{{ error }} </span>
+    {% endfor %}
+    <br />
+    <label for="#username"> {{ form.username.label }} </label>
+    {{ form.username(size=16, class="w3-input w3-border w3-round",
+    id="username") }} {% for error in form.username.errors %}
+    <span style="color: red">{{ error }} </span>
+    {% endfor %}
+    <br />
+    <label for="#email">{{ form.email.label }} </label>
+    {{ form.email(size=16, id="email", class="w3-input w3-border w3-round",
+    placeholder="example@email.com") }} {% for error in form.email.errors %}
+    <span style="color: red">{{ error }} </span>
+    {% endfor %}
+    <br />
+
+    <div id="registration-password-div">
+      <label id="password-visible-toggler">
+        <label class="switch">
+          <input
+            id="registration-password-visibility"
+            type="checkbox"
+            onclick="togglePasswordShow()"
+          />
+          <span class="slider round"></span>
+        </label>
+      </label>
+      <label for="registration-password"> {{ form.password.label }} </label>
+      {{ form.password(size=16, class="w3-input w3-border w3-round",
+      id="registration-password" , type="password") }} {% for error in
+      form.password.errors %}
+      <span style="color: red">{{ error }} </span>
+      {% endfor %}
+    </div>
+    <span id="capslock-text" style="display: none; color: red"
+      >Caps Lock is on</span
+    >
+    <br />
+
+    <label for="#password2"> {{ form.password2.label }} </label>
+    {{ form.password2(size=16, class="w3-input w3-border
+    w3-round",type="password") }} {% for error in form.password2.errors %}
+    <span style="color: red">{{ error }} </span>
+
+    {% endfor %} <br />
+    {{ form.submit(type="submit", class="w3-button w3-block w3-round
+    w3-margin-top w3-margin-right w3-margin-bottom w3-green") }}
+  </form>
+  <div>
+    <p>
+      Already have an account ? <a href="{{url_for('auth.login')}}">Login</a>
+    </p>
   </div>
 </div>
 
-{% endblock %} {% block right_column %}
-<div>MORE REGISTERATION DESIGNS</div>
 {% endblock %}

@@ -1,4 +1,4 @@
-<div class="border-0 border-start border-2 ps-2" id="{{comment.id}}">
+<div class="w3-border-0 w3-border-left w3-row-padding" id="{{comment.id}}">
   <div class="mt-3">
     <strong>{{comment.author.username}}</strong>
     {% if comment.parent_id == None %} replying to
@@ -10,44 +10,52 @@
       >{{ moment(comment.timestamp).fromNow(refresh=True) }}</small
     >
   </div>
-  <div class="border p-2 rounded">
+  <div class="w3-border w3-padding-small w3-round">
     <p>{{comment.body}}</p>
-    <div class="row mx-2">
-      <button
-        class="btn btn-primary btn-sm col-1 rounded-pill"
-        onclick="handleReply({{ comment.id }})"
-      >
-        Reply
-      </button>
-      {% if not current_user.is_anonymous %} {% if not
-      current_user.comment_liked(comment) %}
+
+    {% if current_user.is_authenticated %}
+    <div class="w3-bar">
+      {% if not current_user.liked_c(comment) %}
       <form
-        class="col-2"
+        class="w3-button w3-hover-white"
         action="{{ url_for('main.like_comment', comment_id=comment.id)}}"
         method="post"
       >
         <button
           type="submit"
           value="Like"
-          class="btn btn-primary btn-sm rounded-pill"
+          class="w3-border-0 w3-button w3-hover-white"
         >
-          Like
-          <span class="badge bg-secondary">{{comment.likes.count()}}</span>
+          <i class="fa fa-thumbs-up" style="font-size: 15px"></i>
+          {{comment.likes.count()}}
         </button>
       </form>
 
       {% else %}
+
       <form
+        class="w3-button w3-hover-white"
         action="{{ url_for('main.unlike_comment', comment_id=comment.id)}}"
         method="post"
       >
-        <button type="submit" value="Unlike" class="btn btn-primary">
-          Unlike
-          <span class="badge bg-secondary">{{comment.likes.count()}}</span>
+        <button
+          type="submit"
+          value="Unlike"
+          class="w3-border-0 w3-button w3-hover-white"
+        >
+          <i class="fa fa-thumbs-down" style="font-size: 15px"></i>
+          {{comment.likes.count()}}
         </button>
       </form>
-      {% endif %} {% endif %}
-      <div class="col"></div>
+
+      {% endif %}
+      <button
+        class="w3-border-0 w3-button w3-hover-white"
+        onclick="handleReply({{ comment.id }})"
+      >
+        <i class="fa fa-comment" style="font-size: 15px"></i>
+        {{ comment.replies.count() }}
+      </button>
     </div>
     {% if form %}
     <div id="reply-form-container-{{comment.id}}" style="display: none">
@@ -55,11 +63,6 @@
         {{ form.hidden_tag() }}
         <input type="hidden" name="post_id" value="{{post.id}}" />
         <input type="hidden" name="parent" value="{{comment.id}}" />
-        <!-- <input
-          type="hidden"
-          name="post_url"
-          value="{{post.get_absolute_url}}"
-        /> -->
 
         {{ form.comment(class='form-control')}}
 
@@ -67,16 +70,22 @@
           <button
             type="button"
             onclick="handleCancel({{comment.id}})"
-            class="btn btn-light border btn-sm"
+            class="w3-small w3-button"
           >
             Cancel
           </button>
-          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+          <button
+            type="submit"
+            class="w3-buttton w3-border-0 w3-blue w3-small w3-round"
+          >
+            reply
+          </button>
         </div>
       </form>
     </div>
-    {% endif %}
+    {% endif %} {% endif %}
   </div>
+
   <div>
     {% for reply in comment.replies %} {% with comment=reply %} {% include
     'main/_comments.html' %} {% endwith %} {% endfor %}

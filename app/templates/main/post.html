@@ -1,19 +1,31 @@
-{% extends 'base.html' %} {% block left_column %}
-<div>SIDEBAR GOES HERE</div>
-{% endblock %} {% block page_content %}
-
-<div class="mb-4 mt-2">
-  <div>{% include 'main/_post.html' %}</div>
-  <h3>Add Comment</h3>
-  {% if form %}
-  <form method="post" action="">
-    {{ form.hidden_tag() }} {{ form.comment(class='form-control') }} {{
-    form.submit(class='btn btn-primary mt-3', type='submit')}}
-  </form>
-  {% endif %} {% if not post.comments.all() %} No comments yet {% else %} {% for
-  comment in post.get_comments() %} {% with comment=comment %} {% include
-  'main/_comments.html' %} {% endwith %} {% endfor %} {% endif %}
+{% extends 'base.html' %} {% block page_content %}
+<div class="w3-margin-bottom">
+  <div class="w3-border-bottom w3-opacity">
+    <a
+      class=""
+      href="{% if g.prev %}{{g.prev}} {% else %}{{url_for('main.index')}} {% endif %}"
+    >
+      <i
+        class="fa fa-arrow-left w3-margin-left"
+        style="font-size: 25px; color: black; font-weight: lighter"
+      ></i
+    ></a>
+  </div>
+  <div class="w3-margin">
+    <div>{% include 'main/_post.html' %}</div>
+    <h5 style="font-style: italic">Comment</h5>
+    {% if form %}
+    <form method="post" action="">
+      {{ form.hidden_tag() }} {{ form.comment(class='w3-input w3-border w3-small
+      w3-round ') }} {{ form.submit(class='w3-button w3-margin-top w3-blue
+      w3-right w3-round', type='submit')}}
+    </form>
+    {% endif %} {% if not post.comments.all() %} No comments yet {% else %} {%
+    for comment in post.get_comments() %} {% with comment=comment %} {% include
+    'main/_comments.html' %} {% endwith %} {% endfor %} {% endif %}
+  </div>
 </div>
+
 {% endblock %} {% block right_column %}
 <div class="w3-hide-small w3-margin-top">
   {% include 'main/_post_widgets.html' %}

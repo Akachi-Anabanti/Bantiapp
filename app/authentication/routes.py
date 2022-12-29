@@ -34,13 +34,13 @@ def before_request():
 @auth.route("/login", methods=["POST", "GET"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("main.index"))
+        logout_user()
     form = LoginForm()
     if form.validate_on_submit():
         if len(form.username.data.split("@")) == 2:
             user = User.query.filter_by(email=form.username.data.lower()).first()
         else:
-            user = User.query.filter_by(username=form.username.data).first()
+            user = User.query.filter_by(username=form.username.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for(".login"))
@@ -64,12 +64,22 @@ def register():
         return redirect(url_for("main.index"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(
+            username=form.username.data.lower(),
+            email=form.email.data.lower(),
+            fullName=form.fullname.data,
+        )
         user.set_password(form.password.data)
+        user.set_uid()
+
         db.session.add(user)
-        db.session.commit()
-        flash("Registration successful")
-        return redirect(url_for(".login"))
+        try:
+            db.session.commit()
+            flash("Registration successful")
+            return redirect(url_for("main.index"))
+        except:
+            db.session.rollback()
+            flash("Something went wrong try again")
     return render_template("auth/register.html", title="Register", form=form)
 
 

@@ -1,7 +1,9 @@
-{% extends 'base.html' %} {% block left_column %} {% include
-'user/_profile.html' %} {% endblock %} {% block page_content %} {% for post in
-posts %}
-<a href="{{url_for('main.post_detail', id=post.id)}}"
-  >{% include 'main/_post.html' %}</a
->{% endfor %} {% endblock %} {% block right_column %} {% include
-'user/_user_widgets.html' %} {% endblock %}
+{% extends 'base.html' %} {% block page_content %} {% include
+'user/_profile.html' %} <br />
+{% for post in posts %} {% include 'main/_post.html' %}
+<hr />
+{% endfor %} {% endblock %} {% block right_column %}
+<div class="w3-hide-small">
+  {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}
+</div>
+{% endblock %}

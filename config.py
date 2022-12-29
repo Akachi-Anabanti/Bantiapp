@@ -7,22 +7,19 @@ load_dotenv(os.path.join(basedir, ".env"))
 
 
 class Config(object):
-    SECRET_KEY = (
-        os.environ.get("SECRET_KEY")
-        or "b\x0e\xfe\xe8\x1f#\xe8\xacR\x89\x91\x958\x10^\x89'\x18\x07\x97\xb4X\x9cR^\xf4\xb3 C\x12Aj6\xb5\xdb\xf2iFmBQ\xc7k,o\xd2\xab:\x03Z2\x17\xb1\x03f\x82j\xbaw\xb74\xee\xf6\x8d\x8c"
-    )
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "a892d34c873011edb8225c3a4547d4d8"
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         "DATABASE_URI"
     ) or "sqlite:///" + os.path.join(basedir, "app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
-    MAIL_PORT = int(os.environ.get("MAIL_PORT") or 25)
+    MAIL_PORT = int(os.environ.get("MAIL_PORT") or 587)
     MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") is not None
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
-    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_PASSWORD = os.environ.get("SENDGRID_API_KEY")
     ADMINS = ["akachi.anabanti@outlook.com"]
-    POST_PER_PAGE = 5
+    POST_PER_PAGE = 20
     COMMENTS_PER_PAGE = 5
     ELASTICSEARCH_PASSWORD = os.environ.get("ELASTICSEARCH_PASSWORD")
     ELASTICSEARCH_URL = os.environ.get("ELASTICSEARCH_URL")

@@ -1,0 +1,61 @@
+.registration-container {
+  margin-left: 37.5%;
+  margin-right: 37.5%;
+  width: 25%;
+  margin-top: 2%;
+}
+.registration-container form #fullname:focus,
+#email:focus,
+#username:focus,
+#registration-password:focus,
+#password2:focus {
+  outline: 1px solid steelblue;
+}
+.registration-container form span {
+  text-transform: lowercase;
+  text-shadow: 5px;
+  font-style: italic;
+}
+.registration-container form {
+  background-color: whitesmoke;
+}
+@media screen and (min-width: 1201px) {
+  .registration-container {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .registration-container {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .registration-container {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .registration-container {
+    width: 75%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .registration-container {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+@media screen and (max-width: 300px) {
+  .registration-container {
+    width: 100%;
+  }
+}

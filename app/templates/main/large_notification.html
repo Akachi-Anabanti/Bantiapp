@@ -1,0 +1,19 @@
+<h5 class="text-center">
+  <strong>{{ _('Notifications')}}</strong>
+</h5>
+
+{% for notification in notifications %}
+
+<div class="w3-margin w3-border-bottom">
+  <div>
+    <a
+      href="{{url_for('bp.user', username=notification.source.username)}}"
+      style="position: relative"
+      >{{ notification.source.username }}</a
+    >{% if notification.action == 'post_liked' %} liked your post {% elif
+    notification.action == 'user_followed' %} followed you {% elif
+    notification.action == 'comment_liked' %} liked your comment {% endif %}
+  </div>
+</div>
+
+{% endfor %}

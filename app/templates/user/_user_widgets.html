@@ -1,15 +1,4 @@
-<div class="w3-card w3-margin-left w3-round w3-white w3-center">
-  <div class="w3-container">
-    <p>Upcoming Events:</p>
-    <img src="/w3images/forest.jpg" alt="Forest" style="width: 100%" />
-    <p><strong>Holiday</strong></p>
-    <p>Friday 15:00</p>
-    <p>
-      <button class="w3-button w3-block w3-theme-l4">Info</button>
-    </p>
-  </div>
-</div>
-<br />
+<!-- 
 
 <div class="w3-card w3-margin-left w3-round w3-white w3-center">
   <div class="w3-container">
@@ -41,4 +30,14 @@
   <p><i class="fa fa-bug w3-xxlarge"></i></p>
 </div>
 
-<!-- End Right Column -->
+End Right Column -->
+<div class="w3-margin">
+  <h6 id="people-know" class="text-center" style="display: none">
+    <b>Persons you might Know</b>
+  </h6>
+  <div id="recommended-users" style="max-height: 400px; overflow: auto"></div>
+</div>
+
+{% include 'info.html' %}
+<br />
+{% include 'holiday.html' %}

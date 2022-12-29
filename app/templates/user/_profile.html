@@ -1,115 +1,105 @@
-<!-- Profile -->
-<div class="w3-card w3-round w3-white">
-  <div class="w3-container">
-    <h4 class="w3-center">My Profile</h4>
-    <p class="w3-center">
-      <img
-        src="{{url_for('main.serve_photo', username=user.username)}}"
-        class="w3-circle"
-        style="height: 106px; width: 106px"
-        alt="Avatar"
-      />
+<div class="w3-border-bottom w3-opacity">
+  <a
+    class=""
+    href="{% if g.prev %}{{g.prev}} {% else %}{{url_for('main.index')}} {% endif %}"
+  >
+    <i
+      class="fa fa-arrow-left w3-margin-left"
+      style="font-size: 25px; color: black; font-weight: lighter"
+    ></i
+  ></a>
+</div>
+<div class="w3-border-bottom" style="position: relative">
+  <div
+    style="
+      background-image: url('https://source.unsplash.com/random/');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: grey;
+      height: 200px;
+    "
+  ></div>
+  <img
+    class="text-center"
+    src="{{ user.avatar(30) }}"
+    alt="profile photo"
+    style="
+      height: 150px;
+      width: 150px;
+      border-radius: 100%;
+      border: 5px solid whitesmoke;
+      display: inline-block;
+      position: absolute;
+      top: 25%;
+      left: 2%;
+    "
+  />
+
+  <div
+    class="w3-margin"
+    style="
+      position: absolute;
+      right: 2%;
+      z-index: 0.2;
+      top: 50%;
+      display: inline-flex;
+    "
+  >
+    {% if user == current_user %}
+    <a
+      class="w3-round-xlarge w3-button w3-border"
+      style="text-decoration: none"
+      href="{{ url_for('bp.edit_profile')}}"
+      >Edit Profile</a
+    >
+    {% elif current_user.is_anonymous or not current_user.is_following(user) %}
+    <form
+      action="{{ url_for('bp.follow', username=user.username) }}"
+      method="post"
+    >
+      {{ form.hidden_tag() }} {{ form.submit(value='Follow',class="btn
+      btn-primary")}}
+    </form>
+    {% else %}
+    <a href="{{url_for('main.chat', username=user.username)}}"
+      ><i
+        class="fa fa-paper-plane w3-button w3-margin-right w3-hover-white w3-hover-opacity"
+        style="font-size: 25px"
+        aria-hidden="true"
+      ></i
+    ></a>
+    <form
+      action="{{ url_for('bp.unfollow', username=user.username) }}"
+      method="post"
+    >
+      {{ form.hidden_tag() }} {{ form.submit(value='Unfollow', class="btn
+      btn-secondary") }}
+    </form>
+    {% endif %}
+  </div>
+
+  <div style="margin-left: 1%; padding-top: 70px">
+    <p class="w3-margin-left" style="font-size: 30px">{{ user.fullName }}</p>
+    <p class="w3-margin-left" style="font-size: 20px; font-style: italic">
+      <b><i class="fa fa-at"></i>{{user.username}}</b>
     </p>
-    <p class="w3-center">
-      Joined:{{ moment(user.member_since ).format('LL') }}
-    </p>
-    <hr />
     {% if user.about_me %}
-    <p>
-      <i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i>
-      {{user.about_me}}
+    <p style="margin-top: 10px">
+      <i class="fa fa-info fa-fw w3-text-theme"></i> {{user.about_me}}
     </p>
     {% endif %}
+
     <p>
-      <i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>
-      London, UK
+      <i class="fa fa-calendar"></i> Joined {{ moment(user.member_since
+      ).format('LL') }}
     </p>
     <p>
-      <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>
-      April 1, 1988
-    </p>
-  </div>
-</div>
-<br />
-
-<!-- Accordion -->
-<div class="w3-card w3-round">
-  <div class="w3-white">
-    <button
-      onclick="myFunction('groups')"
-      class="w3-button w3-block w3-theme-l1 w3-left-align"
-    >
-      <i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Groups
-    </button>
-    <div id="groups" class="w3-hide w3-container">
-      <p>Some text..</p>
-    </div>
-    <button
-      onclick="myFunction('events')"
-      class="w3-button w3-block w3-theme-l1 w3-left-align"
-    >
-      <i class="fa fa-calendar-check-o fa-fw w3-margin-right"></i> My Events
-    </button>
-    <div id="events" class="w3-hide w3-container">
-      <p>Some other text..</p>
-    </div>
-    <button
-      onclick="myFunction('photos')"
-      class="w3-button w3-block w3-theme-l1 w3-left-align"
-    >
-      <i class="fa fa-users fa-fw w3-margin-right"></i> My Photos
-    </button>
-    <div id="photos" class="w3-hide w3-container">
-      <div class="w3-row-padding">
-        <br />
-        <!-- if post has photos render photos with for loop -->
-        <div class="w3-half">
-          <img
-            src="{{ url_for('main.serve_photo', username=current_user.username)}}"
-            style="width: 100%"
-            class="w3-margin-bottom"
-          />
-        </div>
-        <!-- endfor loop here -->
-      </div>
-    </div>
-  </div>
-</div>
-<br />
-
-<!-- Interests -->
-<div class="w3-card w3-round w3-white w3-hide-small">
-  <div class="w3-container">
-    <p>Interests</p>
-    <p>
-      <span class="w3-tag w3-small w3-theme-d5">News</span>
-      <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
-      <span class="w3-tag w3-small w3-theme-d3">Labels</span>
-      <span class="w3-tag w3-small w3-theme-d2">Games</span>
-      <span class="w3-tag w3-small w3-theme-d1">Friends</span>
-      <span class="w3-tag w3-small w3-theme">Games</span>
-      <span class="w3-tag w3-small w3-theme-l1">Friends</span>
-      <span class="w3-tag w3-small w3-theme-l2">Food</span>
-      <span class="w3-tag w3-small w3-theme-l3">Design</span>
-      <span class="w3-tag w3-small w3-theme-l4">Art</span>
-      <span class="w3-tag w3-small w3-theme-l5">Photos</span>
+      <b>{{ user.followers.count() }} </b>Followers,
+      <b>{{ user.followed.count() }}</b> Following
+      <a href="{{ url_for('main.userfollowers', username=user.username)}}"
+        ><small class="text-muted">see detail</small></a
+      >
     </p>
   </div>
 </div>
-<br />
-
-<!-- Alert Box -->
-<div
-  class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small"
->
-  <span
-    onclick="this.parentElement.style.display='none'"
-    class="w3-button w3-theme-l3 w3-display-topright"
-  >
-    <i class="fa fa-remove"></i>
-  </span>
-  <p><strong>Hey!</strong></p>
-  <p>People are looking at your profile. Find out who.</p>
-</div>
-
-<!-- End Left Column -->

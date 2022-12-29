@@ -1,33 +1,51 @@
-<div
-  class="w3-hover-opacity w3-hover-opacity w3-round w3-margin"
-  style="transform: rotate(0)"
->
+<div class="w3-hover w3-round w3-margin" style="transform: rotate(0)">
   <div class="">
     <div class="w3-row w3-margin-left">
       <img
         id="PostImage-{{post.id}}"
-        src="{{ url_for('main.serve_photo', username=post.author.username)}}"
+        src="{{ post.author.avatar(35) }}"
         alt="Avatar"
-        class="w3-left w3-circle w3-margin-right w3-margin-top"
-        style="width: 35px"
+        class="w3-left w3-margin-right w3-margin-top"
+        style="width: 35px; height: 35px; border-radius: 50%"
       />
-      <span
-        id="PostTime-{{post.id}}"
-        class="w3-right w3-opacity w3-margin-top w3-margin-right"
-        >{{ moment(post.timestamp).fromNow(refresh=True)}}</span
-      >
-      <h4 class="w3-margin-top">
-        <a
-          id="PostAuthor-{{post.id}}"
-          href="{{ url_for('bp.user', username=post.author.username )}}"
-          style="position: relative; z-index: 1000"
-          class="w3-margin-top"
-          >{{post.author.username}}</a
+      <div class="w3-right">
+        <span
+          id="PostTime-{{post.id}}"
+          class="w3-opacity w3-margin-top w3-margin-right"
+          >{{ moment(post.timestamp).fromNow(refresh=True)}}</span
         >
+        <a
+          class=""
+          href="{{url_for('bp.user', username=post.author.username)}}"
+          style="z-index: 1; position: relative"
+          ><i class="fa fa-ellipsis-v w3-margin-top w3-margin-right"></i
+        ></a>
+      </div>
+
+      <h4 class="w3-margin-top">
+        {% set user_link %}
+        <span
+          class="user_popup"
+          style="height: fit-content; width: fit-content"
+        >
+          <a
+            id="PostAuthor-{{post.id}}"
+            href="{{ url_for('bp.user', username=post.author.username )}}"
+            style="
+              position: relative;
+              z-index: 10;
+              font-size: medium;
+              text-decoration: none;
+            "
+            class="w3-margin-top"
+            >{{post.author.username}}</a
+          >
+        </span>
+        {% endset %} {{user_link}}
       </h4>
     </div>
+    <br />
 
-    <hr class="w3-clear" />
     <div class="w3-row w3-margin-left">
       <p id="PostBody-{{post.id}}">{{post.body}}</p>
 
@@ -36,43 +54,39 @@
       >
     </div>
 
-    <!-- <div class="w3-row-padding" style="margin: 0 -16px">
-      <!for loop here to render photo
-      <div class="w3-half">
-        <img
-          src="{{ url_for('main.serve_photo', username=post.author.username)}}/?photo_id{{post.photo}}"
-          style="width: 100%"
-          alt=""
-          class="w3-margin-bottom"
-        />
-      </div>
-      < end for loop here>
-    </div> -->
     {% if current_user.is_authenticated %}
     <div class="w3-bar">
       {% if g.empty_form %} {{ g.empty_form.hidden_tag() }} {% if not
-      current_user.liked(post) %}
+      current_user.liked_p(post) %}
 
       <form
-        class="w3-button"
+        class="w3-button w3-hover-white"
         action="{{ url_for('main.like', post_id=post.id)}}"
         method="post"
-        style="position: relative; z-index: 10000"
+        style="position: relative; z-index: 1000"
       >
-        <button type="submit" value="Like" class="w3-border-0 w3-button">
-          <i class="fa fa-thumbs-up" style="font-size: 20px"></i>
+        <button
+          type="submit"
+          value="Like"
+          class="w3-border-0 w3-button w3-hover-white"
+        >
+          <i class="fa fa-thumbs-up" style="font-size: 15px"></i>
           {{post.likes.count()}}
         </button>
       </form>
       {% else %}
       <form
-        class="w3-button"
+        class="w3-button w3-hover-white"
         action="{{ url_for('main.unlike', post_id=post.id)}}"
         method="post"
-        style="position: relative; z-index: 10000"
+        style="position: relative; z-index: 1000"
       >
-        <button type="submit" value="Unlike" class="w3-border-0 w3-button">
-          <i class="fa fa-thumbs-down" style="font-size: 20px"></i>
+        <button
+          type="submit"
+          value="Unlike"
+          class="w3-border-0 w3-button w3-hover-white"
+        >
+          <i class="fa fa-thumbs-down" style="font-size: 15px"></i>
           {{post.likes.count()}}
         </button>
       </form>
@@ -81,26 +95,28 @@
       <button
         id="comment-button-{{post.id}}"
         type="submit"
-        class="w3-border-0 w3-button"
-        style="position: relative; z-index: 10000"
+        class="w3-border-0 w3-button w3-hover-white"
+        style="position: relative; z-index: 1000"
         onclick="setModalPost({{post.id}})"
       >
-        <i class="fa fa-comment" style="font-size: 20px"></i> {{
+        <i class="fa fa-comment" style="font-size: 15px"></i> {{
         post.comments.count() }}
       </button>
-      <button class="w3-button">
-        <i class="fa fa-share" style="font-size: 20px"></i>
-      </button>
-      <button class="w3-button">
-        <i class="fa fa-bell" style="font-size: 20px"></i>
-      </button>
+
+      <a
+        class="w3-button w3-right w3-hover-white w3-margin-top"
+        style="position: relative; z-index: 1000"
+        href=""
+      >
+        <i class="fa fa-share" style="font-size: 15px"></i>
+      </a>
     </div>
     {% endif %}
   </div>
   <a
     id="PostUrl-{{post.id}}"
     class="stretched-link"
-    href="{{url_for('main.post_detail', id=post.id)}}"
+    href="{{url_for('main.post_detail', _id=post.pid)}}"
   ></a>
 </div>
 

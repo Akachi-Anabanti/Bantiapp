@@ -1,0 +1,27 @@
+{% if message.author==current_user %}
+<div class="w3-right w3-margin-right">
+  <small class="text-muted w3-right"
+    >{{ moment(message.timestamp).fromNow(refresh=True) }}</small
+  >
+  <div
+    class="w3-round bg-secondary text-white"
+    style="max-width: 300px; height: fit-content"
+  >
+    <p class="w3-margin w3-container">{{ message.body }}</p>
+  </div>
+</div>
+<br />
+{% else %}
+<div class="w3-left w3-margin-left">
+  <small class="text-muted w3-left"
+    >{{ moment(message.timestamp).fromNow(refresh=True) }}</small
+  >
+  <div
+    class="w3-round bg-secondary text-white"
+    style="max-width: 300px; height: fit-content"
+  >
+    <p class="w3-margin w3-container">{{ message.body }}</p>
+  </div>
+</div>
+<br />
+{% endif %}

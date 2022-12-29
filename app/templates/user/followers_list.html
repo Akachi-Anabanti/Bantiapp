@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block page_content %} {% for user in users %} {% if
+user != current_user %}
+<div class="w3-border-bottom">
+  <div class="w3-row w3-margin">
+    <div class="w3-threequarter">
+      <img
+        src="{{user.avatar(50)}}"
+        alt=""
+        class="w3-left w3-circle w3-margin-right"
+      />
+      <div class="w3-margin">
+        <p class="">
+          <strong>{{ user.fullName }}</strong>
+          <a href="{{url_for('bp.user', username=user.username)}}">
+            <small>@{{ user.username }}</small></a
+          >{% if user.is_following(current_user) %}
+          <span class="text-muted" style="font-style: italic"
+            ><small>follows you</small>
+          </span>
+          {% endif %}
+        </p>
+      </div>
+      {% if user.about_me %}
+      <div class="w3-container">
+        <i class="fa fa-info fa-fw"></i>{{ user.about_me }}
+      </div>
+      {% endif %}
+    </div>
+    {% if not current_user.is_following(user) %}
+    <form
+      action="{{ url_for('bp.follow', username=user.username) }}"
+      method="post"
+      class="w3-quarter w3-margin"
+    >
+      {{ form.hidden_tag()}} {{ form.submit(type="submit" ,value="Follow"
+      ,class="w3-button w3-hover-grey w3-small w3-blue w3-round", style="width:
+      fit-content;") }}
+    </form>
+    {% else %}
+    <form
+      action="{{ url_for('bp.unfollow', username=user.username) }}"
+      method="post"
+      class="w3-quarter w3-margin"
+    >
+      {{ form.hidden_tag()}} {{ form.submit(type="submit" ,value="Unfollow"
+      ,class="w3-button w3-hover-blue w3-small w3-grey w3-round", style="width:
+      fit-content;") }}
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endif %} {% endfor %} {% endblock %} {% block right_column %}
+<div class="w3-hide-small">
+  {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}
+</div>
+{% endblock %}

@@ -10,6 +10,7 @@ import json
 import redis
 import rq
 from flask import current_app
+import uuid
 
 
 class SearchableMixin(object):
@@ -63,10 +64,16 @@ followers = db.Table(
     db.Column("followed_id", db.Integer, db.ForeignKey("user.id")),
 )
 
-likes = db.Table(
-    "likes",
+p_likes = db.Table(
+    "p_likes",
     db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
     db.Column("post_id", db.Integer, db.ForeignKey("post.id")),
+)
+
+
+c_likes = db.Table(
+    "c_likes",
+    db.Column("user_id", db.Integer, db.ForeignKey("user.id")),
     db.Column(
         "comment_id",
         db.Integer,
@@ -77,33 +84,42 @@ likes = db.Table(
 
 class User(SearchableMixin, db.Model, UserMixin):
     __searchable__ = ["username"]
+    uid = db.Column(db.String(32), unique=True)
     id = db.Column(db.Integer, primary_key=True)
+    fullName = db.Column(db.String)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    posts = db.relationship("Post", backref="author", lazy="dynamic")
+    posts = db.relationship(
+        "Post", backref="author", lazy="dynamic", cascade="all, delete"
+    )
 
-    comments = db.relationship("Comment", backref="author", lazy="dynamic")
+    comments = db.relationship(
+        "Comment", backref="author", lazy="dynamic", cascade="all, delete"
+    )
 
     last_message_read_time = db.Column(db.DateTime)
 
+    last_notification_checked_time = db.Column(db.DateTime)
+
     liked_post = db.relationship(
         "Post",
-        secondary=likes,
-        primaryjoin=(likes.c.user_id == id),
+        secondary=p_likes,
+        primaryjoin=(p_likes.c.user_id == id),
         backref=db.backref("likes", lazy="dynamic"),
         lazy="dynamic",
+        cascade="all, delete",
     )
     liked_comment = db.relationship(
         "Comment",
-        secondary=likes,
-        primaryjoin=(likes.c.user_id == id),
+        secondary=c_likes,
+        primaryjoin=(c_likes.c.user_id == id),
         backref=db.backref("likes", lazy="dynamic"),
         lazy="dynamic",
-        overlaps="liked_post,likes",
+        cascade="all, delete",
     )
 
     followed = db.relationship(
@@ -113,10 +129,15 @@ class User(SearchableMixin, db.Model, UserMixin):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref("followers", lazy="dynamic"),
         lazy="dynamic",
+        cascade="all, delete",
     )
 
     messages_sent = db.relationship(
-        "Message", foreign_keys="Message.sender_id", backref="author", lazy="dynamic"
+        "Message",
+        foreign_keys="Message.sender_id",
+        backref="author",
+        lazy="dynamic",
+        cascade="all, delete",
     )
 
     messages_received = db.relationship(
@@ -124,9 +145,27 @@ class User(SearchableMixin, db.Model, UserMixin):
         foreign_keys="Message.recipient_id",
         backref="recipient",
         lazy="dynamic",
+        cascade="all, delete",
     )
 
-    notifications = db.relationship("Notification", backref="user", lazy="dynamic")
+    notifications = db.relationship(
+        "Notification", backref="user", lazy="dynamic", cascade="all, delete"
+    )
+
+    pusher_notifications_created = db.relationship(
+        "PusherNotification",
+        foreign_keys="PusherNotification.source_id",
+        backref="source",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
+    pusher_notifications_received = db.relationship(
+        "PusherNotification",
+        foreign_keys="PusherNotification.target_id",
+        backref="target",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
 
     tasks = db.relationship("Task", backref="user", lazy="dynamic")
     # Notification helper methods
@@ -135,6 +174,14 @@ class User(SearchableMixin, db.Model, UserMixin):
         n = Notification(name=name, payload_json=json.dumps(data), user=self)
         db.session.add(n)
         return n
+
+    def new_pusher_notifications(self):
+        last_checked_time = self.last_notification_checked_time or datetime(1900, 1, 1)
+        return (
+            PusherNotification.query.filter_by(target=self)
+            .filter(PusherNotification.timestamp > last_checked_time)
+            .count()
+        )
 
     # MESSAGES
     def new_messages(self):
@@ -158,7 +205,10 @@ class User(SearchableMixin, db.Model, UserMixin):
             digest, size
         )
 
-    # FOLLOWERS
+    def set_uid(self):
+        self.uid = uuid.uuid4().hex
+
+    # FOLLOWINGS
     def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
@@ -181,38 +231,38 @@ class User(SearchableMixin, db.Model, UserMixin):
 
     # POST AND COMMENT LIKES HELPERS METHODS
     def liked_posts(self):
-        liked = Post.query.join(likes, (likes.c.user_id == Post.user_id)).filter(
-            likes.c.user_id == self.id
+        liked = Post.query.join(p_likes, (p_likes.c.user_id == Post.user_id)).filter(
+            p_likes.c.user_id == self.id
         )
         return liked
 
-    def like(self, post):
-        if not self.liked(post):
+    def like_p(self, post):
+        if not self.liked_p(post):
             self.liked_post.append(post)
 
-    def unlike(self, post):
-        if self.liked(post):
+    def unlike_p(self, post):
+        if self.liked_p(post):
             self.liked_post.remove(post)
 
-    def liked(self, post):
-        return self.liked_post.filter(likes.c.post_id == post.id).count() > 0
+    def liked_p(self, post):
+        return self.liked_post.filter(p_likes.c.post_id == post.id).count() > 0
 
     def liked_comments(self):
-        liked = Comment.query.join(likes, (likes.c.user_id == Comment.user_id)).filter(
-            likes.c.user_id == self.id
-        )
+        liked = Comment.query.join(
+            c_likes, (c_likes.c.user_id == Comment.user_id)
+        ).filter(c_likes.c.user_id == self.id)
         return liked
 
-    def like_comment(self, comment):
-        if not self.liked(comment):
+    def like_c(self, comment):
+        if not self.liked_c(comment):
             self.liked_comment.append(comment)
 
-    def unlike_comment(self, comment):
-        if self.liked(comment):
-            self.liked_post.remove(comment)
+    def unlike_c(self, comment):
+        if self.liked_c(comment):
+            self.liked_comment.remove(comment)
 
-    def comment_liked(self, comment):
-        return self.liked_comment.filter(likes.c.post_id == comment.id).count() > 0
+    def liked_c(self, comment):
+        return self.liked_comment.filter(c_likes.c.comment_id == comment.id).count() > 0
 
     def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
@@ -251,14 +301,20 @@ class User(SearchableMixin, db.Model, UserMixin):
 
 class Post(SearchableMixin, db.Model):
     __searchable__ = ["body"]
+    pid = db.Column(db.String(32), unique=True)
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    comments = db.relationship("Comment", backref="post", lazy="dynamic")
+    comments = db.relationship(
+        "Comment", backref="post", lazy="dynamic", cascade="all, delete"
+    )
 
     def get_comments(self):
         return Comment.query.filter_by(post_id=self.id, parent_id=None).all()
+
+    def set_pid(self):
+        self.pid = uuid.uuid4().hex
 
     def __repr__(self) -> str:
         return f"<Post {self.body}>"
@@ -267,6 +323,7 @@ class Post(SearchableMixin, db.Model):
 class Comment(SearchableMixin, db.Model):
     __searchable__ = ["body"]
     __tablename__ = "comment"
+    cid = db.Column(db.String(32), unique=True)
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -276,14 +333,18 @@ class Comment(SearchableMixin, db.Model):
 
     replies = db.relationship(
         "Comment",
-        backref=db.backref("reply", remote_side="Comment.id", uselist=False),
+        backref=db.backref("reply", remote_side="Comment.id", cascade="all, delete"),
+        lazy="dynamic",
     )
+
+    def set_cid(self):
+        self.cid = uuid.uuid4().hex
 
     def __repr__(self) -> str:
         return f"<Comment {self.body}>"
 
 
-class Message(db.Model):
+class Message(SearchableMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     recipient_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -322,6 +383,14 @@ class Task(db.Model):
     def get_progress(self):
         job = self.get_rq_job()
         return job.meta.get("progress", 0) if job is not None else 100
+
+
+class PusherNotification(db.Model):
+    id = db.Column(db.Integer, primary_key=True, index=True)
+    action = db.Column(db.String(128))
+    source_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    target_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
 
 @login.user_loader

@@ -1,0 +1,60 @@
+.login-container {
+  margin-left: 37.5%;
+  margin-right: 37.5%;
+  width: 25%;
+  margin-top: 5%;
+}
+.login-container form #email:focus,
+#username:focus,
+#password:focus,
+#password2:focus {
+  outline: 1px solid steelblue;
+}
+.login-container form span {
+  text-transform: lowercase;
+  text-shadow: 5px;
+  font-style: italic;
+}
+.login-container form {
+  background-color: whitesmoke;
+}
+@media screen and (min-width: 1201px) {
+  .login-container {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .login-container {
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+  }
+}
+@media screen and (max-width: 1023px) {
+  .login-container {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .login-container {
+    width: 75%;
+    margin-left: 12.5%;
+    margin-right: 12.5%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .login-container {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+}
+@media screen and (max-width: 300px) {
+  .login-container {
+    width: 100%;
+  }
+}

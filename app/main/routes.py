@@ -10,11 +10,9 @@ from flask import (
     jsonify,
 )
 from flask_login import login_required, current_user
-from app.models import Post, Comment, Notification, User, Message
+from app.models import Post, Comment, Notification, User, Message, PusherNotification
 from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
-import os
-from flask import send_from_directory
 from datetime import datetime
 from flask_babel import get_locale
 from flask_moment import moment
@@ -25,10 +23,12 @@ def before_request():
     if current_user.is_authenticated:
         g.search_form = SearchForm()
         g.empty_form = EmptyForm()
+        g.post_form = PostForm()
     g.locale = str(get_locale())
 
 
 @main.route("/explore")
+@login_required
 def explore():
     page = request.args.get("page", 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
@@ -52,6 +52,7 @@ def index():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
+        post.set_pid()
         db.session.add(post)
         db.session.commit()
         flash("Your post is live!")
@@ -74,11 +75,13 @@ def index():
     )
 
 
-@main.route("/post/<int:id>", methods=["GET", "POST"])
+@main.route("/post/<string:_id>", methods=["GET", "POST"])
 @login_required
-def post_detail(id):
-    post = Post.query.get(id)
+def post_detail(_id):
+    post = Post.query.filter_by(pid=_id).first()
     form = CommentForm()
+    prev = request.referrer
+    g.prev = prev
     if not post:
         flash("Post does not exist")
         return redirect(url_for("main.index"))
@@ -90,8 +93,9 @@ def post_detail(id):
             new_comment = Comment(
                 body=comment_body,
                 author_id=current_user.id,
-                post_id=id,
+                post_id=post.id,
             )
+            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
@@ -100,15 +104,21 @@ def post_detail(id):
             new_comment = Comment(
                 body=comment_body,
                 author_id=current_user.id,
-                post_id=id,
+                post_id=post.id,
             )
+            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
         else:
-            return redirect(url_for(".post_detail", id=id) + "#")
-        return redirect(url_for(".post_detail", id=id) + "#" + str(new_comment.id))
-    return render_template("main/post.html", form=form, comments=comments, post=post)
+            return redirect(url_for(".post_detail", _id=_id) + "#")
+        return redirect(url_for(".post_detail", _id=_id) + "#" + str(new_comment.cid))
+    return render_template(
+        "main/post.html",
+        form=form,
+        comments=comments,
+        post=post,
+    )
 
 
 @main.route("/comment/reply", methods=["GET", "POST"])
@@ -125,12 +135,15 @@ def reply():
                 post_id=post_id,
                 parent_id=parent_id,
             )
+            reply.set_cid()
             db.session.add(reply)
-
-            reply.post = Post.query.get(post_id)
+            post = Post.query.get(post_id)
+            reply.post = post
             reply.comment = Comment.query.get(parent_id)
             db.session.commit()
-            return redirect(url_for(".post_detail", id=post_id) + "#" + str(reply.id))
+            return redirect(
+                url_for(".post_detail", _id=post.pid) + "#" + str(reply.cid)
+            )
     return redirect(url_for(".index"))
 
 
@@ -152,26 +165,22 @@ def search():
     prev_url = (
         url_for(".search", q=g.search_form.q.data, page=page - 1) if page > 1 else None
     )
-    # return render_template(
-    #     "main/search.html",
-    #     title="Search",
-    #     posts=posts,
-    #     next_url=next_url,
-    #     prev_url=prev_url,
-    # )
-    data = [
-        {
-            "username": post.author.username,
-            "time": moment(post.timestamp).fromNow(refresh=True),
-            "body": post.body,
-            "id": post.id,
-            "postUrl": url_for("main.post_detail", id=post.id),
-            "userUrl": url_for("bp.user", username=post.author.username),
-            "imgUrl": url_for("main.serve_photo", username=post.author.username),
-        }
-        for post in posts
-    ]
-    return jsonify(data)
+    size = request.args.get("s")
+    if size and size == "l":
+        return render_template(
+            "main/large_search.html",
+            posts=posts,
+            prev_url=prev_url,
+            next_url=next_url,
+        )
+    else:
+        return render_template(
+            "main/search.html",
+            title="Search",
+            posts=posts,
+            prev_url=prev_url,
+            next_url=next_url,
+        )
 
 
 @main.route("/notifications")
@@ -190,7 +199,7 @@ def notifications():
     )
 
 
-@main.route("/like/<int:post_id>", methods=["POST", "GET"])
+@main.route("/like/<int:post_id>", methods=["POST"])
 @login_required
 def like(post_id):
     if request.method == "GET":
@@ -201,7 +210,13 @@ def like(post_id):
         return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.like(post)
+    current_user.like_p(post)
+    new_notification = PusherNotification(
+        action="post_liked", source=current_user, target=post.author
+    )
+    db.session.add(new_notification)
+
+    post.author.add_notification("post_liked", post.author.new_pusher_notifications())
     db.session.commit()
     # current_app.pusher('blog', 'post_liked',)
     flash("You liked a post by {}".format(post.author.username))
@@ -217,34 +232,37 @@ def unlike(post_id):
         return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.unlike(post)
+    current_user.unlike_p(post)
     db.session.commit()
     flash("You unliked a post by {}".format(post.author.username))
     return redirect(url_for(".index"))
 
 
-@main.route("/like_comment/<int:comment_id>", methods=["POST", "GET"])
+@main.route("/like_comment/<int:comment_id>", methods=["POST"])
 @login_required
 def like_comment(comment_id):
-    if request.method == "GET":
-        return redirect(url_for(".index"))
+
     comment = Comment.query.get(comment_id)
-    if comment is None:
-        flash("comment not found.")
-        return redirect(
-            url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id)
-        )
-    if current_user == comment.author:
-        return redirect(
-            url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id)
-        )
-    current_user.like_comment(comment)
+
+    if comment is None or current_user == comment.author:
+        return redirect(url_for(".index"))
+
+    current_user.like_c(comment)
+
+    new_notification = PusherNotification(
+        action="comment_liked", source=current_user, target=comment.author
+    )
+    db.session.add(new_notification)
+
     comment.author.add_notification(
-        "comment_likes_count", comment.author.new_notifications()
+        "post_liked", comment.author.new_pusher_notifications()
     )  # ADDING LIKED COMMENT NOTIFICATIONS
     db.session.commit()
+
     flash("You liked a comment by {}".format(comment.author.username))
-    return redirect(url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id))
+    return redirect(
+        url_for(".post_detail", _id=comment.post.pid) + "#" + str(comment.cid)
+    )
 
 
 @main.route("/unlike_comment/<int:comment_id>", methods=["POST"])
@@ -253,23 +271,24 @@ def unlike_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first()
     if comment is None:
         flash("Comment not found.")
-        return redirect(
-            url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id)
-        )
+        return redirect(url_for(".index"))
     if current_user == comment.author:
         return redirect(
             url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id)
         )
-    current_user.unlike_comment(comment)
-
+    current_user.unlike_c(comment)
     db.session.commit()
     flash("You unliked a comment by {}".format(comment.author.username))
-    return redirect(url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id))
+    return redirect(
+        url_for(".post_detail", id=comment.post.pid) + "#" + str(comment.cid)
+    )
 
 
 @main.route("/send_message/<recipient>", methods=["POST", "GET"])
 @login_required
 def send_message(recipient):
+    if current_user.username == recipient:
+        return redirect(url_for("bp.user", username=recipient))
     user = User.query.filter_by(username=recipient).first_or_404()
     form = MessageForm()
     if request.method == "POST":
@@ -279,7 +298,7 @@ def send_message(recipient):
             db.session.add(msg)
             db.session.commit()
             flash("Your message has been sent")
-            return redirect(url_for("bp.user", username=recipient))
+            return redirect(url_for(".chat", username=recipient))
     return render_template(
         "user/send_message.html", title="Send Message", form=form, recipient=recipient
     )
@@ -290,9 +309,7 @@ def send_message(recipient):
 def messages():
     current_user.last_message_read_time = datetime.utcnow()
     current_user.add_notification("unread_message_count", 0)
-
     db.session.commit()
-
     page = request.args.get("page", 1, type=int)
 
     messages = current_user.messages_received.order_by(
@@ -306,9 +323,36 @@ def messages():
     )
     return render_template(
         "main/messages.html",
+        title="Messages",
         messages=messages.items,
         prev_url=prev_url,
         next_url=next_url,
+    )
+
+
+@main.route("/chat/<username>", methods=["POST", "GET"])
+@login_required
+def chat(username):
+
+    form = MessageForm()
+
+    user = User.query.filter_by(username=username).first_or_404()
+
+    page = request.args.get("page", 1, type=int)
+
+    received_messages = current_user.messages_sent.filter(
+        Message.recipient_id == user.id
+    )
+
+    sent_messages = current_user.messages_received.filter(Message.sender_id == user.id)
+
+    messages = received_messages.union(sent_messages).order_by(Message.timestamp.asc())
+    return render_template(
+        "main/chat.html",
+        title="Chat",
+        form=form,
+        messages=messages,
+        user=user,
     )
 
 
@@ -323,24 +367,80 @@ def export_posts():
     return redirect(url_for("bp.user", username=current_user.username))
 
 
-@main.route("/load_photo/<username>")
-def serve_photo(username):
-    folder = f"photos/{username}/profile_pictures"
-    folder = os.path.abspath(folder)
-    filename = os.listdir(folder)[
-        0
-    ]  # First picture in the list of pictures in the director directory
-    return send_from_directory(folder, filename)
+# @main.route("/load_photo/<username>")
+# def serve_photo(username):
+#     folder = f"photos/{username}/profile_pictures"
+#     folder = os.path.abspath(folder)
+#     folder = os.path.abspath("photos/meme")
+#     filename = os.listdir(folder)[0]
+#     return send_from_directory(folder, filename)
 
 
-@main.route("/users-list/<int:post_id>")
-def users_list():
-    post_id = request.args.get("post_id")
+# @main.route("/users-list/<string:post_id>")
+# def users_list():
+#     post_id = request.args.get("post_id")
 
-    post = Post.query.filter_by(id=post_id)
+#     post = Post.query.filter_by(id=post_id)
 
-    if post is None:
-        return
-    users = post.likes
-    1
-    return jsonify({"users": users})
+#     if post is None:
+#         return ""
+#     users = post.likes
+#     if current_user == post.author:
+
+#     return render_template("user/post_users.html", users=users)
+
+
+@main.route("/notification_list")
+@login_required
+def notification_list():
+    current_user.last_notification_checked_time = datetime.utcnow()
+    current_user.add_notification("post_liked", 0)
+    current_user.add_notification("user_followed", 0)
+
+    db.session.commit()
+
+    page = request.args.get("page", 1, type=int)
+
+    notification = current_user.pusher_notifications_received.order_by(
+        PusherNotification.timestamp.desc()
+    ).paginate(page, current_app.config["POST_PER_PAGE"], False)
+    next_url = (
+        url_for(".notification_list", page=notification.next_num)
+        if notification.has_next
+        else None
+    )
+    prev_url = (
+        url_for(".notification_list", page=notification.prev_num)
+        if notification.has_prev
+        else None
+    )
+    if request.args.get("s", type=str) == "l":
+        return render_template(
+            "main/large_notification.html",
+            notifications=notification.items,
+            prev_url=prev_url,
+            next_url=next_url,
+        )
+    else:
+        return render_template(
+            "main/notification.html",
+            notifications=notification.items,
+            prev_url=prev_url,
+            next_url=next_url,
+        )
+
+
+@main.route("/<username>/followers")
+@login_required
+def userfollowers(username):
+    form = EmptyForm()
+    user = User.query.filter_by(username=username).first()
+    if user:
+        users = user.followed.union(user.followers)
+        return render_template(
+            "user/followers_list.html",
+            title=f"{username}/follows",
+            users=users,
+            form=form,
+        )
+    return redirect(url_for("main.index"))

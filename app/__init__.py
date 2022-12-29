@@ -4,7 +4,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from elasticsearch import Elasticsearch
-from app.extensions import db, migrate, login, mail, bable, moment
+from app.extensions import db, migrate, login, mail, bable, moment, pusher
 from redis import Redis
 import rq
 from pusher import Pusher
@@ -22,6 +22,14 @@ def create_app(config_class=Config):
     mail.init_app(app)
     moment.init_app(app)
     bable.init_app(app)
+    pusher.init_app(
+        app,
+        app_id=app.config["PUSHER_APP_ID"],
+        key=app.config["PUSHER_KEY"],
+        secret=app.config["PUSHER_SECRET"],
+        cluster=app.config["PUSHER_CLUSTER"],
+        ssl=True,
+    )
 
     if not app.debug:
         if app.config["MAIL_SERVER"]:
@@ -73,16 +81,13 @@ def create_app(config_class=Config):
 
     app.redis = Redis.from_url(app.config["REDIS_URL"])
     app.task_queue = rq.Queue("microblog-tasks", connection=app.redis)
-    try:
-        app.pusher = Pusher(
-            app_id=app.config["PUSHER_APP_ID"],
-            key=app.config["PUSHER_KEY"],
-            secret=app.config["PUSHER_SECRET"],
-            cluster=app.config["PUSHER_CLUSTER"],
-            ssl=True,
-        )
-    except Exception as e:
-        print(e)
+    # app.pusher = Pusher(
+    #     app_id=app.config["PUSHER_APP_ID"],
+    #     key=app.config["PUSHER_KEY"],
+    #     secret=app.config["PUSHER_SECRET"],
+    #     cluster=app.config["PUSHER_CLUSTER"],
+    #     ssl=True,
+    # )
 
     from app.authentication import auth as auth_blueprint
 

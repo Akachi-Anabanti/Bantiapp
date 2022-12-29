@@ -1,20 +1,29 @@
-<div class="">
+<div
+  class="w3-bar w3-border-bottom w3-hover-grey w3-hover-opacity"
+  style="transform: rotate(0)"
+>
   <a
-    class="link-dark"
-    href="{{ url_for('bp.user', username=post.author.username )}}"
+    href="{{url_for('main.chat', username=message.author.username)}}"
+    class="stretched-link"
+  ></a>
+  {% with author = message.author %}
+  <a
+    class="link-dark w3-bar-item w3-left"
+    href="{{ url_for('bp.user', username=message.author.username )}}"
+    style="position: relative; z-index: 1000"
   >
-    <img
-      class="rounded-circle me-2"
-      src="{{ url_for('main.serve_photo', username=post.author.username) }}"
+    <!-- <img
+      class=""
+      src="{{ url_for('main.serve_photo', username=message.author.username) }}"
       alt=""
-      width="25"
-      height="25"
-    />
+      style="width: 15px; height: 15px; border-radius: 50%"
+    /> -->
+    {{ author.username }}
   </a>
-  <small class="text-muted"
-    >{{ moment(post.timestamp).fromNow(refresh=True) }}</small
+
+  <p class="w3-bar-item">sent you a message</p>
+  <span class="text-muted w3-display-topright w3-margin-right"
+    >{{ moment(message.timestamp).fromNow(refresh=True) }}</span
   >
-  <div class="shadow-sm rounded col-6 bg-secondary text-white">
-    <p class="mx-4">{{ post.body }}</p>
-  </div>
+  {% endwith %}
 </div>

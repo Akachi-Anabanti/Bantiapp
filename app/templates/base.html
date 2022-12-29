@@ -41,56 +41,115 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-    <link rel="stylesheet" href="../static/assets/dist/css/main.css" />
-    <!-- Pathefis font for Title-->
+
+    <!-- Pathefis font for Title -->
     <link href="https://fonts.cdnfonts.com/css/pethafis" rel="stylesheet" />
 
     <!----BOOTSTRAP EXTRA-->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css
+"
     />
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- custom css -->
+    <link rel="stylesheet" href="../static/assets/dist/css/main.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/badge_design.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/smallNav.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/login.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/register.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/message_alert.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/password_show.css" />
+
+    <link
+      rel="stylesheet"
+      href="../static/assets/dist/css/reset_password.css"
+    />
   </head>
   <body class="w3-theme-15">
-    {% if current_user.is_authenticated %}
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for
+    message in messages %}
+    <div
+      id="messageAlert"
+      class="w3-container w3-display-container w3-blue w3-round"
+    >
+      <span
+        onclick="this.parentElement.style.display='none'"
+        class="w3-button w3-hover-blue w3-blue w3-margin-left w3-right w3-small"
+      >
+        <i class="fa fa-remove"></i>
+      </span>
+      <p class="w3-left w3-margin-right">{{ message }}</p>
+    </div>
+    {% endfor %} {% endif %} {% endwith %} {% if current_user.is_authenticated
+    %}
     <!-- Navbar -->
 
     {% include 'main/_sidebar_home.html' %}
 
     <!-- Navbar on small screens -->
+    <div class="w3-top">
+      <div id="smallNavbar" class="w3-bar">
+        <h4 class="w3-bar-item" style="font-family: Pethafis">Banti</h4>
+        <div id="SmallNavItems">
+          {% if g.search_form %}
+          <form
+            class="w3-bar-item"
+            action="{{ url_for('main.search')}}"
+            method="get"
+          >
+            <div>
+              {{ g.search_form.q(size=20,
+              class="w3-input",type="text",placeholder="Search..",
+              id="example-search-input")}}
+            </div>
+          </form>
+          {% endif %}
+          <a
+            href="{{url_for('main.notification_list')}}"
+            class="w3-bar-item w3-button"
+          >
+            <i class="my-base-badge fa fa-bell">
+              {% set new_notificaton = current_user.new_pusher_notifications()
+              %}
+              <div
+                id="notification_badge_small"
+                class="my-badge-indicator"
+                style="display: {% if new_notification %} block {% else %} none {% endif %}"
+              ></div>
+            </i>
+          </a>
+          <a
+            id="userMenuSmall"
+            tabindex="0"
+            data-bs-toggle="popover"
+            data-bs-trigger="focus"
+            data-bs-placement="bottom"
+            class="w3-bar-item w3-button"
+          >
+            <i class="fa fa-ellipsis-v"></i
+          ></a>
+        </div>
+      </div>
+    </div>
     {% endif %}
 
     <!-- Page Container -->
+
+    {% block content %}
     <div class="main-content w3-container w3-content" style="max-width: 1400px">
-      {% block content %}
       <!-- The Grid -->
-      <div class="w3-row">
+      <div id="main" class="w3-row">
         <!-- Left Column -->
-        <!-- <div class="w3-col m3">{% block left_column %} {% endblock %}</div> -->
 
         <!-- Middle Column -->
-        <div class="w3-col m8 w3-border-left w3-border-right">
-          {% with messages = get_flashed_messages() %} {% if messages %} {% for
-          message in messages %}
-          <div class="w3-panel w3-green w3-round">
-            <h4>{{ message }}</h4>
-            <span
-              onclick="this.parentElement.style.display='none'"
-              class="w3-button w3-display-topright"
-              >&times;</span
-            >
-          </div>
-          {% endfor %} {% endif %} {% endwith %}
+        <div class="w3-col m8 w3-border">
           <br />
 
           {% block page_content %} {% endblock %}
         </div>
 
         <!-- Right Column -->
-        <div class="w3-col m4" style="margin-top: 20px">
+        <div class="w3-col m4" style="margin-top: 20px; max-height: 70px">
           {% block right_column %}{% endblock %}
         </div>
 
@@ -98,13 +157,32 @@
       </div>
 
       <!-- End Page Container -->
-      {% endblock %}
     </div>
+    {% endblock %}
 
     <br />
     {% block script %} {{ moment.include_moment() }}
-    <script src="../static/assets/dist/js/jquery.js"></script>
-    <script src="../static/assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script
+      async
+      src="https://platform.twitter.com/widgets.js"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.3.js"
+      integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+      crossorigin="anonymous"
+    ></script>
+
     <script src="../static/assets/dist/js/reply.js"></script>
     <script src="../static/assets/dist/js/message.js"></script>
     <script src="../static/assets/dist/js/tasks.js"></script>
@@ -115,5 +193,128 @@
     {% endif %}{% endblock %}
     <script src="../static/assets/dist/js/accordion.js"></script>
     <script src="../static/assets/dist/js/navabar_toggler.js"></script>
+    <script src="../static/assets/dist/js/typing.js"></script>
+    <script src="../static/assets/dist/js/createPostModal.js"></script>
+    <script src="../static/assets/dist/js/hoilday.js"></script>
+
+    <!-- <script src="../static/assets/dist/js/menu_popover.js"></script> -->
+
+    <script>
+      $(function () {
+        var timer = null;
+        var xhr = null;
+        $(".user_popup").hover(
+          function (event) {
+            // mouse in event handler
+            var elem = $(event.currentTarget);
+            timer = setTimeout(function () {
+              timer = null;
+              xhr = $.ajax(
+                "/user/" + elem.first().text().trim() + "/popup"
+              ).done(function (data) {
+                // ALLOWED attributes
+                var myDefaultAllowList = bootstrap.Tooltip.Default.allowList;
+
+                // // // To allow table elements
+                // myDefaultAllowList.table = [];
+                // // To allow td elements and data-bs-option attributes on td elements
+                // myDefaultAllowList.tr = ["data-bs-option"];
+
+                myDefaultAllowList.form = ["action", "method", "novalidate"];
+                myDefaultAllowList.input = ["type", "value", "style"];
+                myDefaultAllowList.img = ["style", "src"];
+                myDefaultAllowList.i = ["style"];
+                xhr = null;
+                elem
+                  .popover({
+                    trigger: "manual",
+                    html: true,
+                    sanitize: false,
+                    animation: false,
+                    container: elem,
+                    content: data,
+                  })
+                  .popover("show");
+                flask_moment_render_all();
+              });
+            }, 100);
+          },
+          function (event) {
+            // mouse out event handler
+            var elem = $(event.currentTarget);
+            if (timer) {
+              clearTimeout(timer);
+              timer = null;
+            } else if (xhr) {
+              xhr.abort();
+              xhr = null;
+            } else {
+              elem.popover("dispose");
+            }
+          }
+        );
+      });
+      //USERMENU SIDEMENU POPOVER
+      let username = "{{ current_user.username}}";
+      $("#userMenu").click(function (event) {
+        var myDefaultAllowList = bootstrap.Tooltip.Default.allowList;
+
+        myDefaultAllowList.a = ["style"];
+
+        var elem = $(event.currentTarget);
+        html = `<div id="userMenuOptions" class="w3-container">
+                <div class="w3-bar-block w3-margin" >
+                  <a href="/auth/login" class="w3-bar-item" style="text-decoration:none;" > Login to another account </a>
+                  <hr class="w3-clear" />
+                  <a href="/auth/logout" class="w3-bar-item" style="text-decoration:none;">Logout out of ${username}</a>
+                </div>
+            </div> `;
+        elem
+          .popover({
+            trigger: "manual",
+            html: true,
+            sanitize: false,
+            animation: false,
+            container: "body",
+            content: html,
+          })
+          .popover("show");
+        setTimeout(function () {
+          elem.popover("dispose");
+        }, 4000);
+      });
+      //MENU POPOVER SCRIPT
+      //small screen
+      $("#userMenuSmall").click(function (event) {
+        var myDefaultAllowList = bootstrap.Tooltip.Default.allowList;
+
+        myDefaultAllowList.a = ["style"];
+
+        var elem = $(event.currentTarget);
+        html = `<div id="userMenuOptions" class="w3-display-container">
+                <div class="w3-bar-block" >
+                  <a href="" class="w3-bar-item" style="text-decoration:none" > <i class="fa fa-lightbulb-o fa-fw"></i> Activites</a>
+          
+                </div>
+                <hr class="w3-clear" />
+                <div>
+                <a href="/auth/logout" style="text-decoration:none;">Logout out of ${username}</a>
+                </div>
+            </div> `;
+        elem
+          .popover({
+            trigger: "manual",
+            html: true,
+            sanitize: false,
+            animation: false,
+            container: "body",
+            content: html,
+          })
+          .popover("show");
+        setTimeout(function () {
+          elem.popover("dispose");
+        }, 4000);
+      });
+    </script>
   </body>
 </html>

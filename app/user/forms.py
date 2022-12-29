@@ -15,6 +15,13 @@ class EmptyForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+class PostForm(FlaskForm):
+    post = TextAreaField(
+        "What is on your mind?", validators=[DataRequired(), Length(min=1, max=200)]
+    )
+    submit = SubmitField("Share")
+
+
 class EditProfileForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])
     about_me = TextAreaField("About me", validators=[Length(min=0, max=140)])

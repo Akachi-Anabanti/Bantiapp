@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block content %}
+<h5 class="text-center" style="margin-top: 70px">{{ _('Notifications')}}</h5>
+
+<div class="" style="overflow: auto; height: 500px">
+  {% for notification in notifications %}
+  <div
+    class="w3-bar w3-container w3-display-container w3-round w3-border w3-margin"
+  >
+    <span class="w3-right text-muted"
+      >{{ moment(notification.timestamp).fromNow(refresh=True)}}
+    </span>
+    {% if notification.action == "user_followed" %}
+    <p class="">
+      <a href="{{url_for('bp.user', username=notification.source.username)}}"
+        >{{ notification.source.username }} </a
+      >followed you
+    </p>
+    {% elif notification.action == "post_liked" %}
+    <p class="">
+      <a href="{{url_for('bp.user', username=notification.source.username)}}"
+        >{{ notification.source.username }} </a
+      >liked your post
+    </p>
+    {% elif notification.action == "comment_liked" %}
+    <p class="">
+      <a href="{{url_for('bp.user', username=notification.source.username)}}"
+        >{{ notification.source.username }} </a
+      >liked your comment
+    </p>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <div>{% include 'main/_pager.html' %}</div>
+</div>
+{% endblock %}

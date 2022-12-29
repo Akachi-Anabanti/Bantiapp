@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block page_content %}
+<a
+  href="{{url_for('bp.user', username=user.username)}}"
+  style="text-decoration: none"
+>
+  <h5 class="w3-margin-left" style="font-family: monospace">
+    <img
+      src="{{ user.avatar(30) }}"
+      alt=""
+      style="width: 30px; height: 30px; border-radius: 50%"
+    />
+    {{user.username}}
+  </h5>
+</a>
+
+<div
+  id="messageDiv"
+  class="w3-card"
+  style="background-color: skyblue; position: absolute; overflow: auto"
+>
+  {% for message in messages %}
+  <div class="w3-bar" style="position: relative">
+    {% include 'main/_chat.html' %}
+  </div>
+  {% endfor %}
+</div>
+<div id="chatDiv" class="w3-bar" style="position: absolute">
+  <form
+    action="{{url_for('main.send_message', recipient=user.username)}}"
+    method="post"
+    class="w3-margin"
+  >
+    {{ form.hidden_tag() }} {{ form.message(size='10', class='w3-border w3-input
+    w3-round-xxlarge ', id='chatForm', placeholder="type message")}} {% for
+    error in form.message.errors %}
+    <span style="color: red">{{ error }} </span>
+    {% endfor %} {{form.submit(class='w3-button w3-round-xlarge w3-blue w3-right
+    w3-small', id="chatButton")}}
+  </form>
+</div>
+
+{% endblock %}

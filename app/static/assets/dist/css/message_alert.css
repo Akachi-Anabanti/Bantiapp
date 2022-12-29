@@ -1,0 +1,47 @@
+#messageAlert {
+  z-index: 1000;
+  position: absolute;
+  align-self: center;
+  top: 3px;
+}
+
+@media screen and (min-width: 1201px) {
+  #messageAlert {
+    width: 50%;
+    left: 25%;
+    right: 25%;
+  }
+}
+@media screen and (max-width: 1200px) {
+  #messageAlert {
+    width: 50%;
+    left: 25%;
+    right: 25%;
+  }
+}
+@media screen and (max-width: 1023px) {
+  #messageAlert {
+    width: 60%;
+    left: 20%;
+    right: 20%;
+  }
+}
+@media screen and (max-width: 768px) {
+  #messageAlert {
+    width: 75%;
+    left: 12.5%;
+    right: 12.5%;
+  }
+}
+@media screen and (max-width: 480px) {
+  #messageAlert {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+}
+@media screen and (max-width: 300px) {
+  #messageAlert {
+    width: 100%;
+  }
+}

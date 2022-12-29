@@ -1,41 +1,34 @@
-{% extends "../base.html" %} {% block page_content %}
+{% extends "base.html" %} {% block page_content %}
 
-<h1>Edit Profile</h1>
-<div>
+<h4 class="w3-marign text-center">Edit Profile</h4>
+<div class="w3-margin">
   <img
-    src="{{url_for('main.serve_photo', username=current_user.username) }}"
+    src="{{ current_user.avatar(50) }}"
     alt=""
-    width="100"
-    height="100"
     loading="lazy"
+    class="w3-circle w3-border w3-border-black"
   />
-  <br />
-  <span>
-    <a href="{{ url_for('bp.upload_picture', username=current_user.username) }}"
-      >Change photo</a
-    >
-  </span>
+  <h5 class="text-muted w3-margin">{{current_user.fullName }}</h5>
 </div>
 <hr />
-<div class="form-group">
+<div class="w3-margin w3-display-container">
   <form action="" method="post">
     {{ form.hidden_tag() }}
-    <p class="form-floating">
-      {{ form.username(size=32, class='form-control', id='username') }} <br />
+    <p class="">
       <label for="#username">{{ form.username.label }} </label>
-      {% for error in form.username.errors %}
+      {{ form.username(size=32, class='w3-input w3-border', id='username') }} {%
+      for error in form.username.errors %}
       <span style="color: red">[{{ error }}]</span>
       {% endfor %}
     </p>
-    <p class="form- floating">
-      {{ form.about_me(cols=50, row=4, class='form-control', id='about_me') }}
-      <br />
+    <p class="">
       <label for="#about_me">{{ form.about_me.label }}</label>
-      {% for error in form.about_me.errors %}
+      {{ form.about_me(cols=50, row=4, class='w3-input w3-border',
+      id='about_me') }} {% for error in form.about_me.errors %}
       <span style="color: red">[{{ error }}]</span>
       {% endfor %}
     </p>
-    <p>{{form.submit(class='btn btn-success') }}</p>
+    <p>{{form.submit(class='w3-button w3-green w3-round') }}</p>
   </form>
 </div>
 

@@ -7,6 +7,9 @@ h4,
 h5 {
   font-family: "Open Sans", sans-serif;
 }
+#pager a {
+  text-decoration: none;
+}
 .post {
   resize: none;
   height: 100px;
@@ -14,19 +17,42 @@ h5 {
 textarea:focus {
   outline: none;
 }
+textarea {
+  resize: none;
+}
+.create-post i {
+  display: none;
+}
+.create-post {
+  display: none;
+}
 
 .my-sidebar {
   margin: 0;
   padding: 0;
-  width: 25px;
+  width: 20%;
   background-color: #fff;
   position: fixed !important;
   height: 100%;
   overflow: auto;
   z-index: 1;
 }
+.my-sidebar a {
+  margin-bottom: 12px;
+}
+.my-sidebar a:last-child {
+  position: absolute;
+  bottom: 0;
+}
+
 div.main-content {
   margin-left: 20%;
+}
+#createPencil {
+  display: none;
+}
+#smallNavbar {
+  display: none;
 }
 
 @media (max-width: 1200px) {
@@ -37,12 +63,39 @@ div.main-content {
   .my-sidebar a i {
     font-size: 27px !important;
     text-align: center;
+    margin-left: 20px;
   }
   .my-sidebar {
-    width: 160px;
+    width: 15%;
+  }
+  div.main-content {
+    margin-left: 15%;
   }
   .my-sidebar h3 {
     font-size: 0px !important;
+  }
+  .create-post {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 5px solid rgb(20, 133, 219);
+    display: inline-block;
+    justify-items: center;
+    text-align: center;
+    margin-left: 5px;
+  }
+  .create-post i {
+    display: inline-block;
+    font-size: 25px;
+  }
+  #postLink {
+    display: none;
+  }
+  #menuSpan {
+    display: none;
+  }
+  #searchBar {
+    width: 30%;
   }
 }
 .my-sidebar a i {
@@ -63,14 +116,28 @@ div.main-content {
 .my-sidebar a:link {
   text-decoration: none;
 }
+#messageDiv {
+  width: 52%;
+  max-height: 70%;
+}
+#chatDiv {
+  width: 52%;
+  float: left;
+  bottom: 10px;
+}
+
+#chatForm {
+  float: left;
+  margin-right: 5px;
+  resize: none;
+  height: 50px;
+  margin-bottom: 5px;
+  overflow: auto;
+  width: 80%;
+}
+
 /* On screens that are less than 700px wide, make the sidebar into a topbar */
-@media screen and (max-width: 580px) {
-  /* .my-sidebar {
-    overflow: hidden;
-    position: sticky;
-    bottom: 0;
-    width: 100%;
-  } */
+@media screen and (max-width: 600px) {
   .w3-bar-block {
     display: inline-flex;
     width: 100%;
@@ -81,6 +148,32 @@ div.main-content {
     align-items: center;
     justify-content: left;
     margin-right: 0;
+    background-color: whitesmoke;
+  }
+  .create-post {
+    display: none;
+  }
+  #createPencil {
+    display: block;
+  }
+  .create-post-small {
+    bottom: 10%;
+    position: fixed;
+    right: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 5px solid rgb(20, 133, 219);
+    display: inline-block;
+    justify-items: center;
+    text-align: center;
+    z-index: 1000;
+  }
+  .my-sidebar #searchButton {
+    display: none;
+  }
+  .my-sidebar #notification-button {
+    display: none;
   }
 
   .my-sidebar a i {
@@ -90,6 +183,33 @@ div.main-content {
     margin-left: 0;
     margin-bottom: 20%;
   }
+  .my-sidebar .w3-button:last-child {
+    width: 8px;
+    margin-bottom: 20px;
+  }
+  .my-sidebar .w3-button {
+    border-radius: 0%;
+  }
+  .my-sidebar a:last-child {
+    display: none;
+  }
+  #messageDiv {
+    width: 92%;
+    max-height: 50%;
+  }
+  #chatDiv {
+    width: 92%;
+    float: left;
+    bottom: 17%;
+  }
+  #chatForm {
+    float: left;
+    margin-right: 5px;
+    resize: none;
+    height: 50px;
+    overflow: auto;
+    width: 80%;
+  }
 }
 
 /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
@@ -98,4 +218,31 @@ div.main-content {
     text-align: center;
     float: none;
   }
+  #messageDiv {
+    width: 92%;
+    max-height: 50%;
+  }
+  #chatDiv {
+    width: 92%;
+    float: left;
+    bottom: 20%;
+  }
+  #chatForm {
+    float: left;
+    margin-right: 5px;
+    resize: none;
+    height: 50px;
+    overflow: auto;
+    width: 80%;
+  }
 }
+
+@media screen and (max-width: 900px) {
+  #messageAlert {
+    width: 70%;
+    left: 15%;
+    right: 15%;
+    top: 6%;
+  }
+}
+/* Popover Body */
