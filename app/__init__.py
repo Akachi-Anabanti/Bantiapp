@@ -98,5 +98,8 @@ def create_app(config_name):
     from app.feed import fd as feed_blueprint
 
     app.register_blueprint(feed_blueprint)
+    from app.ent import et as extras_blueprint
+
+    app.register_blueprint(extras_blueprint)
 
     return app

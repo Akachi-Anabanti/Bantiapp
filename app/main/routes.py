@@ -15,10 +15,9 @@ from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
 from datetime import datetime
 from flask_babel import get_locale
-from flask_moment import moment
 
 
-@main.before_request
+@main.before_app_request
 def before_request():
     if current_user.is_authenticated:
         g.search_form = SearchForm()
@@ -55,7 +54,7 @@ def index():
         post.set_pid()
         db.session.add(post)
         db.session.commit()
-        flash("Your post is live!")
+        flash("Your post is live!", category="message")
         return redirect(url_for("main.index"))
     page = request.args.get("page", 1, type=int)
 
@@ -83,7 +82,7 @@ def post_detail(_id):
     prev = request.referrer
     g.prev = prev
     if not post:
-        flash("Post does not exist")
+        flash("Post does not exist", category="error")
         return redirect(url_for("main.index"))
     comments = post.comments
     if request.method == "POST":
@@ -206,7 +205,7 @@ def like(post_id):
         return redirect(url_for(".index"))
     post = Post.query.get(post_id)
     if post is None:
-        flash("post not found.")
+        flash("post not found.", category="error")
         return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
@@ -219,7 +218,7 @@ def like(post_id):
     post.author.add_notification("post_liked", post.author.new_pusher_notifications())
     db.session.commit()
     # current_app.pusher('blog', 'post_liked',)
-    flash("You liked a post by {}".format(post.author.username))
+    flash("You liked a post by {}".format(post.author.username), category="info")
     return redirect(url_for(".explore"))
 
 
@@ -228,13 +227,13 @@ def like(post_id):
 def unlike(post_id):
     post = Post.query.filter_by(id=post_id).first()
     if post is None:
-        flash("Post not found.")
+        flash("Post not found.", category="error")
         return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
     current_user.unlike_p(post)
     db.session.commit()
-    flash("You unliked a post by {}".format(post.author.username))
+    flash("You unliked a post by {}".format(post.author.username), category="info")
     return redirect(url_for(".index"))
 
 
@@ -259,7 +258,7 @@ def like_comment(comment_id):
     )  # ADDING LIKED COMMENT NOTIFICATIONS
     db.session.commit()
 
-    flash("You liked a comment by {}".format(comment.author.username))
+    flash("You liked a comment by {}".format(comment.author.username), category="info")
     return redirect(
         url_for(".post_detail", _id=comment.post.pid) + "#" + str(comment.cid)
     )
@@ -270,7 +269,7 @@ def like_comment(comment_id):
 def unlike_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first()
     if comment is None:
-        flash("Comment not found.")
+        flash("Comment not found.", category="error")
         return redirect(url_for(".index"))
     if current_user == comment.author:
         return redirect(
@@ -278,7 +277,9 @@ def unlike_comment(comment_id):
         )
     current_user.unlike_c(comment)
     db.session.commit()
-    flash("You unliked a comment by {}".format(comment.author.username))
+    flash(
+        "You unliked a comment by {}".format(comment.author.username), category="info"
+    )
     return redirect(
         url_for(".post_detail", id=comment.post.pid) + "#" + str(comment.cid)
     )
@@ -297,7 +298,7 @@ def send_message(recipient):
             user.add_notification("unread_message_count", user.new_messages())
             db.session.add(msg)
             db.session.commit()
-            flash("Your message has been sent")
+            flash("Your message has been sent", category="message")
             return redirect(url_for(".chat", username=recipient))
     return render_template(
         "user/send_message.html", title="Send Message", form=form, recipient=recipient
@@ -360,34 +361,11 @@ def chat(username):
 @login_required
 def export_posts():
     if current_user.get_task_in_progress("export_posts"):
-        flash("An export task is currently in progress")
+        flash("An export task is currently in progress", category="warning")
     else:
         current_user.launch_task("export_posts", "Exporting posts...")
         db.session.commit()
     return redirect(url_for("bp.user", username=current_user.username))
-
-
-# @main.route("/load_photo/<username>")
-# def serve_photo(username):
-#     folder = f"photos/{username}/profile_pictures"
-#     folder = os.path.abspath(folder)
-#     folder = os.path.abspath("photos/meme")
-#     filename = os.listdir(folder)[0]
-#     return send_from_directory(folder, filename)
-
-
-# @main.route("/users-list/<string:post_id>")
-# def users_list():
-#     post_id = request.args.get("post_id")
-
-#     post = Post.query.filter_by(id=post_id)
-
-#     if post is None:
-#         return ""
-#     users = post.likes
-#     if current_user == post.author:
-
-#     return render_template("user/post_users.html", users=users)
 
 
 @main.route("/notification_list")

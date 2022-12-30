@@ -116,19 +116,8 @@ div.main-content {
 .my-sidebar a:link {
   text-decoration: none;
 }
-#messageDiv {
-  width: 52%;
-  max-height: 70%;
-}
-#chatDiv {
-  width: 52%;
-  float: left;
-  bottom: 10px;
-}
 
 #chatForm {
-  float: left;
-  margin-right: 5px;
   resize: none;
   height: 50px;
   margin-bottom: 5px;
@@ -193,18 +182,8 @@ div.main-content {
   .my-sidebar a:last-child {
     display: none;
   }
-  #messageDiv {
-    width: 92%;
-    max-height: 50%;
-  }
-  #chatDiv {
-    width: 92%;
-    float: left;
-    bottom: 17%;
-  }
+
   #chatForm {
-    float: left;
-    margin-right: 5px;
     resize: none;
     height: 50px;
     overflow: auto;
@@ -218,18 +197,8 @@ div.main-content {
     text-align: center;
     float: none;
   }
-  #messageDiv {
-    width: 92%;
-    max-height: 50%;
-  }
-  #chatDiv {
-    width: 92%;
-    float: left;
-    bottom: 20%;
-  }
+
   #chatForm {
-    float: left;
-    margin-right: 5px;
     resize: none;
     height: 50px;
     overflow: auto;

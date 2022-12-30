@@ -59,6 +59,7 @@
     <link rel="stylesheet" href="../static/assets/dist/css/register.css" />
     <link rel="stylesheet" href="../static/assets/dist/css/message_alert.css" />
     <link rel="stylesheet" href="../static/assets/dist/css/password_show.css" />
+    <link rel="stylesheet" href="../static/assets/dist/css/chat.css" />
 
     <link
       rel="stylesheet"
@@ -66,15 +67,15 @@
     />
   </head>
   <body class="w3-theme-15">
-    {% with messages = get_flashed_messages() %} {% if messages %} {% for
-    message in messages %}
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
     <div
       id="messageAlert"
-      class="w3-container w3-display-container w3-blue w3-round"
+      class="w3-container w3-display-container {% if category == 'message' %} w3-green {% elif category=='error' %} w3-red {% elif category=='warning' %} w3-yellow {% else %} w3-blue {% endif %} w3-round"
     >
       <span
         onclick="this.parentElement.style.display='none'"
-        class="w3-button w3-hover-blue w3-blue w3-margin-left w3-right w3-small"
+        class="w3-button w3-border-0 w3-margin-left w3-right w3-small"
       >
         <i class="fa fa-remove"></i>
       </span>
@@ -161,7 +162,8 @@
     {% endblock %}
 
     <br />
-    {% block scripts %} {{ moment.include_moment() }}
+    {% block scripts %} {{ moment.include_moment() }} {{
+    pagedown.include_pagedown() }}
 
     <script
       async

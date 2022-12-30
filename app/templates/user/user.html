@@ -1,9 +1,20 @@
 {% extends 'base.html' %} {% block page_content %} {% include
 'user/_profile.html' %} <br />
+<!-- check if user has any post -->
+
+{% if posts|length == 0 %}
+
+<!-- message to display for new users -->
+{% include 'main/welcome.html' %} {% else %}
+
+<!-- display post for old users -->
+
 {% for post in posts %} {% include 'main/_post.html' %}
 <hr />
-{% endfor %} {% endblock %} {% block right_column %}
+{% endfor %} {% include 'main/_pager.html' %} {% endif %}{% endblock %} {% block
+right_column %}
 <div class="w3-hide-small">
   {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}
 </div>
-{% endblock %}
+{% endblock %} {% block scripts %} {{ super() }} {{ pagedown.include_pagedown()
+}} {% endblock %}

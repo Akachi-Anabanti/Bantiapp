@@ -23,9 +23,20 @@
     </div>
   </div>
 </div>
-{% endif %} {% for post in posts %} {% include 'main/_post.html' %}
+{% endif %}
+
+<!-- check if user has any post -->
+
+{% if posts|length == 0 %}
+
+<!-- message to display for new users -->
+{% include 'main/welcome.html' %} {% else %}
+
+<!-- display post for old users -->
+
+{% for post in posts %} {% include 'main/_post.html' %}
 <hr class="w3-clear" />
-{% endfor %} {% include 'main/_pager.html' %} {% endblock %} {% block
+{% endfor %} {% include 'main/_pager.html' %} {% endif %}{% endblock %} {% block
 right_column %}
 <div class="w3-hide-small">
   {% include 'user/_user_widgets.html' %} {% include 'main/footer.html' %}

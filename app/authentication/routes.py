@@ -10,13 +10,12 @@ from flask import (
 from flask import g
 from flask_login import current_user, login_user, logout_user
 from werkzeug.urls import url_parse
-from app import create_app, db
+from app import db
 from .forms import (
     LoginForm,
     RegistrationForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
-    SearchForm,
 )
 from app.models import User
 
@@ -42,7 +41,7 @@ def login():
         else:
             user = User.query.filter_by(username=form.username.data.lower()).first()
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
+            flash("Invalid username or password", category="error")
             return redirect(url_for(".login"))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get("next")
@@ -55,6 +54,7 @@ def login():
 @auth.route("/logout")
 def logout():
     logout_user()
+    flash("You logged out", category="info")
     return redirect(url_for(".login"))
 
 
@@ -75,11 +75,10 @@ def register():
         db.session.add(user)
         try:
             db.session.commit()
-            flash("Registration successful")
+            flash("Registration successful", category="message")
             return redirect(url_for("main.index"))
         except:
-            db.session.rollback()
-            flash("Something went wrong try again")
+            flash("Something went wrong try again", category="error")
     return render_template("auth/register.html", title="Register", form=form)
 
 
@@ -94,7 +93,10 @@ def reset_password_request():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
             send_password_reset_email(user)
-        flash("Check your email for the instructions to reset your password")
+        flash(
+            "Check your email for the instructions to reset your password",
+            category="info",
+        )
 
         return redirect(url_for(".login"))
     return render_template(
@@ -113,6 +115,6 @@ def reset_password(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
-        flash("Your password has been reset.")
+        flash("Your password has been reset.", category="info")
         return redirect(url_for(".login"))
     return render_template("auth/reset_password.html", form=form)

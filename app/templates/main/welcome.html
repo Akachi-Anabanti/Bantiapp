@@ -1,0 +1,40 @@
+<div class="w3-round">
+  <div class="w3-margin w3-content" style="text-align: justify">
+    <h3 class="w3-margin-top"><b>Hello {{ current_user.fullName }}!</b></h3>
+    <h4>
+      Welcome to
+      <span style="font-family: Pethafis; font-size: small">Banti</span>
+    </h4>
+    <p>Empty feed ?, No worries!!</p>
+
+    <p>Here are some things you can do</p>
+    <ul>
+      <li>
+        Get familiar with the Building blocks of this platform, an Interesting
+        write up by the creator of <em style="font-family: Pethafis">Banti</em>
+        <a
+          href="/post/"
+          class="w3-round w3-button w3-margin-left"
+          style="text-decoration: none; background-color: lightblue"
+        >
+          Banti, How we got Here</a
+        >
+      </li>
+      <br />
+      <li>
+        Find out what others are discussing by clicking on the Explore<a
+          class="w3-button"
+          href="{{url_for('main.explore')}}"
+          ><i class="fa fa-globe"></i></a
+        >icon
+      </li>
+      <br />
+      <li>
+        <i class="fa fa-pencil w3-margin-right"></i>Share what is on your mind
+        <small style="font-style: italic"
+          >this is the quickest way to get rid of me, Lol</small
+        >
+      </li>
+    </ul>
+  </div>
+</div>

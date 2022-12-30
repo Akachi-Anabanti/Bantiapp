@@ -2,7 +2,6 @@ var today = new Date();
 var country = "NG";
 const settings = {
   async: true,
-  crossDomain: true,
   url: `https://public-holiday.p.rapidapi.com/2023/${country}`,
   method: "GET",
   headers: {
@@ -13,7 +12,7 @@ const settings = {
 
 $(function () {
   $.ajax(settings).done(function (response) {
-    // console.log(response);
+    console.log(response);
     const nameOfHoliday = document.getElementById("NameOfHoliday");
     const holidayImage = document.getElementById("holidayImage");
     const dayOfHoliday = document.getElementById("dayOfHoliday");

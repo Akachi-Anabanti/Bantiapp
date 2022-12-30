@@ -81,3 +81,6 @@ Traceback (most recent call last):
   File "c:\users\akachi\desktop\winsoftlab\unbiasedapp-backend\.unbiasedvenv\lib\site-packages\elastic_transport\_node\_http_urllib3.py", line 199, in perform_request
     raise err from None
 elastic_transport.ConnectionTimeout: Connection timed out
+2022-12-30 02:42:48,859 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-30 02:43:24,475 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68
+2022-12-30 02:58:28,596 INFO: Microblog startup [in C:\Users\Akachi\Desktop\ICT\Python\Python Web\FLASK\Microblog\app\__init__.py:68

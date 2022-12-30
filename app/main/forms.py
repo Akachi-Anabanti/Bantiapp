@@ -3,7 +3,6 @@ from wtforms.validators import (
     DataRequired,
 )
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed, FileSize, FileRequired
 from wtforms import (
     StringField,
     SubmitField,

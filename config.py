@@ -49,12 +49,17 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URI"
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "").replace(
+        "postgres://", "postgresql://"
     ) or "sqlite:///" + os.path.join(basedir, "app.db")
 
 
 class HerokuConfig(ProductionConfig):
+
+    pass
+
+
+class DigitalOceanConfig(ProductionConfig):
     pass
 
 
@@ -64,4 +69,5 @@ config = {
     "production": ProductionConfig,
     "default": DevelopmentConfig,
     "heroku": HerokuConfig,
+    "digitalocean": DigitalOceanConfig,
 }
