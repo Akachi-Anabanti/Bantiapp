@@ -84,7 +84,7 @@ c_likes = db.Table(
 )
 
 
-class User(SearchableMixin, db.Model, UserMixin):
+class User(db.Model, UserMixin):
     __searchable__ = ["username"]
     uid = db.Column(db.String(32), unique=True)
     id = db.Column(db.Integer, primary_key=True)
@@ -301,7 +301,7 @@ class User(SearchableMixin, db.Model, UserMixin):
         return f"<User {self.username}>"
 
 
-class Post(SearchableMixin, db.Model):
+class Post(db.Model):
     __searchable__ = ["body"]
     pid = db.Column(db.String(32), unique=True)
     id = db.Column(db.Integer, primary_key=True)
@@ -353,7 +353,7 @@ class Post(SearchableMixin, db.Model):
 db.event.listen(Post.body, "set", Post.on_changed_body)
 
 
-class Comment(SearchableMixin, db.Model):
+class Comment(db.Model):
     __searchable__ = ["body"]
     __tablename__ = "comment"
     cid = db.Column(db.String(32), unique=True)
@@ -377,7 +377,7 @@ class Comment(SearchableMixin, db.Model):
         return f"<Comment {self.body}>"
 
 
-class Message(SearchableMixin, db.Model):
+class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sender_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     recipient_id = db.Column(db.Integer, db.ForeignKey("user.id"))

@@ -52,19 +52,16 @@
 "
     />
     <!-- custom css -->
-    <link rel="stylesheet" href="../static/assets/dist/css/main.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/badge_design.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/smallNav.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/login.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/register.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/message_alert.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/password_show.css" />
-    <link rel="stylesheet" href="../static/assets/dist/css/chat.css" />
+    <link rel="stylesheet" href="../static/css/main.css" />
+    <link rel="stylesheet" href="../static/css/badge_design.css" />
+    <link rel="stylesheet" href="../static/css/smallNav.css" />
+    <link rel="stylesheet" href="../static/css/login.css" />
+    <link rel="stylesheet" href="../static/css/register.css" />
+    <link rel="stylesheet" href="../static/css/message_alert.css" />
+    <link rel="stylesheet" href="../static/css/password_show.css" />
+    <link rel="stylesheet" href="../static/css/chat.css" />
 
-    <link
-      rel="stylesheet"
-      href="../static/assets/dist/css/reset_password.css"
-    />
+    <link rel="stylesheet" href="../static/css/reset_password.css" />
   </head>
   <body class="w3-theme-15">
     {% with messages = get_flashed_messages(with_categories=true) %} {% if
@@ -166,11 +163,6 @@
     pagedown.include_pagedown() }}
 
     <script
-      async
-      src="https://platform.twitter.com/widgets.js"
-      charset="utf-8"
-    ></script>
-    <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
       crossorigin="anonymous"
@@ -187,19 +179,19 @@
     ></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script> -->
 
-    <script src="../static/assets/dist/js/reply.js"></script>
-    <script src="../static/assets/dist/js/message.js"></script>
-    <script src="../static/assets/dist/js/tasks.js"></script>
+    <script src="../static/js/reply.js"></script>
+    <script src="../static/js/message.js"></script>
+    <script src="../static/js/tasks.js"></script>
     {% if current_user.is_authenticated %}
-    <script src="../static/assets/dist/js/notifications.js"></script>
-    <script src="../static/assets/dist/js/modal_post.js"></script>
-    <script src="../static/assets/dist/js/searchbar.js"></script>
+    <script src="../static/js/notifications.js"></script>
+    <script src="../static/js/modal_post.js"></script>
+    <script src="../static/js/searchbar.js"></script>
     {% endif %}{% endblock %}
-    <script src="../static/assets/dist/js/accordion.js"></script>
-    <script src="../static/assets/dist/js/navabar_toggler.js"></script>
-    <script src="../static/assets/dist/js/typing.js"></script>
-    <script src="../static/assets/dist/js/createPostModal.js"></script>
-    <script src="../static/assets/dist/js/hoilday.js"></script>
+    <script src="../static/js/accordion.js"></script>
+    <script src="../static/js/navabar_toggler.js"></script>
+    <script src="../static/js/typing.js"></script>
+    <script src="../static/js/createPostModal.js"></script>
+    <script src="../static/js/hoilday.js"></script>
 
     <!-- <script src="../static/assets/dist/js/menu_popover.js"></script> -->
 
