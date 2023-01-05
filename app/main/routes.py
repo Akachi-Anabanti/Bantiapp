@@ -15,6 +15,7 @@ from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
 from datetime import datetime
 from flask_babel import get_locale
+from flask import abort
 
 
 @main.before_app_request
@@ -324,6 +325,8 @@ def chat(username):
 
     user = User.query.filter_by(username=username).first_or_404()
 
+    if not current_user.is_following(user):
+        abort(401)
     page = request.args.get("page", 1, type=int)
 
     received_messages = current_user.messages_sent.filter(
