@@ -8,24 +8,29 @@
     {% endif %}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../static/favicon/apple-touch-icon.png"
+    />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="../static/assets/dist/favicon/favicon-32x32.png"
+      href="../static/favicon/favicon-32x32.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="../static/assets/dist/favicon/favicon-16x16.png"
+      href="../static/favicon/favicon-16x16.png"
     />
+    <link rel="manifest" href="../static/favicon/site.webmanifest" />
     <link
-      rel="manifest"
-      href="../static/assets/dist/favicon/site.webmanifest"
+      rel="mask-icon"
+      href="../static/favicon/safari-pinned-tab.svg"
+      color="#5bbad5"
     />
-    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
@@ -179,22 +184,22 @@
     ></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script> -->
 
+    {% if current_user.is_authenticated %}
     <script src="../static/js/reply.js"></script>
     <script src="../static/js/message.js"></script>
     <script src="../static/js/tasks.js"></script>
-    {% if current_user.is_authenticated %}
     <script src="../static/js/notifications.js"></script>
     <script src="../static/js/modal_post.js"></script>
     <script src="../static/js/searchbar.js"></script>
-    {% endif %}{% endblock %}
     <script src="../static/js/accordion.js"></script>
     <script src="../static/js/navabar_toggler.js"></script>
     <script src="../static/js/typing.js"></script>
     <script src="../static/js/createPostModal.js"></script>
-    <script src="../static/js/hoilday.js"></script>
+    <script src="../static/js/holiday.js"></script>
+    {% endif %}{% endblock %}
 
     <!-- <script src="../static/assets/dist/js/menu_popover.js"></script> -->
-
+    {% if current_user.is_authenticated %}
     <script>
       $(function () {
         var timer = null;
@@ -312,5 +317,6 @@
         }, 4000);
       });
     </script>
+    {% endif %}
   </body>
 </html>
