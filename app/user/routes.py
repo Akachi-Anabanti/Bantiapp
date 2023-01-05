@@ -20,10 +20,7 @@ import random
 def user(username):
     prev = request.referrer
     g.prev = prev
-    user = User.query.filter_by(username=username).first()
-    if not user:
-        flash("User not found", category="error")
-        return redirect(url_for("main.index"))
+    user = User.query.filter_by(username=username).first_or_404()
     form = EmptyForm()
     page = request.args.get("page", 1, type=int)
 
@@ -79,10 +76,7 @@ def follow(username):
         return redirect(url_for(".user", username=username))
     form = EmptyForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        if user is None:
-            flash(f"User {username} not found", category="error")
-            return redirect(url_for("main.index"))
+        user = User.query.filter_by(username=username).first_or_404()
         if user == current_user:
             flash("You cannot follow yourself!")
             return redirect(url_for(".user", username=username))
@@ -108,10 +102,7 @@ def follow(username):
 def unfollow(username):
     form = EmptyForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=username).first()
-        if user is None:
-            flash("User {} not found.".format(username), category="error")
-            return redirect(url_for("main.index"))
+        user = User.query.filter_by(username=username).first_or_404()
         if user == current_user:
             flash("You cannot unfollow yourself!")
             return redirect(url_for(".user", username=username))
