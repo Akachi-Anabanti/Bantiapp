@@ -77,13 +77,10 @@ def index():
 @main.route("/post/<string:_id>", methods=["GET", "POST"])
 @login_required
 def post_detail(_id):
-    post = Post.query.filter_by(pid=_id).first()
+    post = Post.query.filter_by(pid=_id).first_or_404()
     form = CommentForm()
     prev = request.referrer
     g.prev = prev
-    if not post:
-        flash("Post does not exist", category="error")
-        return redirect(url_for("main.index"))
     comments = post.comments
     if request.method == "POST":
         modalbody = request.form.get("post-comment")
@@ -204,9 +201,9 @@ def like(post_id):
     if request.method == "GET":
         return redirect(url_for(".index"))
     post = Post.query.get(post_id)
-    if post is None:
-        flash("post not found.", category="error")
-        return redirect(url_for(".index"))
+    # if post is None:
+    #     flash("post not found.", category="error")
+    #     return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
     current_user.like_p(post)
@@ -225,10 +222,7 @@ def like(post_id):
 @main.route("/unlike/<int:post_id>", methods=["POST"])
 @login_required
 def unlike(post_id):
-    post = Post.query.filter_by(id=post_id).first()
-    if post is None:
-        flash("Post not found.", category="error")
-        return redirect(url_for(".index"))
+    post = Post.query.filter_by(id=post_id).first_or_404()
     if current_user == post.author:
         return redirect(url_for(".index"))
     current_user.unlike_p(post)
@@ -259,30 +253,21 @@ def like_comment(comment_id):
     db.session.commit()
 
     flash("You liked a comment by {}".format(comment.author.username), category="info")
-    return redirect(
-        url_for(".post_detail", _id=comment.post.pid) + "#" + str(comment.cid)
-    )
+    return redirect(url_for(".post_detail", _id=comment.post.pid) + "#")
 
 
 @main.route("/unlike_comment/<int:comment_id>", methods=["POST"])
 @login_required
 def unlike_comment(comment_id):
-    comment = Comment.query.filter_by(id=comment_id).first()
-    if comment is None:
-        flash("Comment not found.", category="error")
-        return redirect(url_for(".index"))
+    comment = Comment.query.filter_by(id=comment_id).first_or_404()
     if current_user == comment.author:
-        return redirect(
-            url_for(".post_detail", id=comment.post.id) + "#" + str(comment.id)
-        )
+        return redirect(url_for(".post_detail", id=comment.post.id) + "#")
     current_user.unlike_c(comment)
     db.session.commit()
     flash(
         "You unliked a comment by {}".format(comment.author.username), category="info"
     )
-    return redirect(
-        url_for(".post_detail", id=comment.post.pid) + "#" + str(comment.cid)
-    )
+    return redirect(url_for(".post_detail", id=comment.post.pid) + "#")
 
 
 @main.route("/send_message/<recipient>", methods=["POST", "GET"])
@@ -412,16 +397,15 @@ def notification_list():
 @login_required
 def userfollowers(username):
     form = EmptyForm()
-    user = User.query.filter_by(username=username).first()
-    if user:
-        users = user.followed.union(user.followers)
-        return render_template(
-            "user/followers_list.html",
-            title=f"{username}/follows",
-            users=users,
-            form=form,
-        )
-    return redirect(url_for("main.index"))
+    user = User.query.filter_by(username=username).first_or_404()
+
+    users = user.followed.union(user.followers)
+    return render_template(
+        "user/followers_list.html",
+        title=f"{username}/follows",
+        users=users,
+        form=form,
+    )
 
 
 @main.route("/activities")
