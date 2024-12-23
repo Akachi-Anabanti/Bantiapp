@@ -2,7 +2,6 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Optional, List, Dict
 from uuid import uuid4
-from models import *
 
 from flask import current_app
 from flask_login import UserMixin
@@ -14,7 +13,7 @@ from app import db, login
 from .mixins import SearchableMixin
 from .tables import followers, post_likes, comment_likes
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from . import *
 
 class User(SearchableMixin, UserMixin, db.Model):
     """User model representing application users."""

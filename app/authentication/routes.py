@@ -1,5 +1,4 @@
 from . import auth
-from flask_babel import get_locale
 from flask import (
     flash,
     redirect,

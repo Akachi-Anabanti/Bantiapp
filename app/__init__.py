@@ -4,7 +4,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from elasticsearch import Elasticsearch
-from app.extensions import db, migrate, login, mail, bable, moment, pusher, pagedown
+from app.extensions import db, migrate, login, mail, moment, pusher, pagedown #bable, 
 from redis import Redis
 import rq
 
@@ -21,9 +21,10 @@ def create_app(config_name):
     login.init_app(app)
     mail.init_app(app)
     moment.init_app(app)
-    bable.init_app(app)
+    # bable.init_app(app)
     pagedown.init_app(app)
-    pusher.init_app(
+    if not app.debug:
+        pusher.init_app(
         app,
         app_id=app.config["PUSHER_APP_ID"],
         key=app.config["PUSHER_KEY"],

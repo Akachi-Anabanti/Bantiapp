@@ -8,7 +8,6 @@ from flask_wtf.file import FileAllowed, FileSize, FileRequired
 from wtforms import StringField, SubmitField, TextAreaField, FileField
 from app.models import User
 from flask import request
-from flask_babel import lazy_gettext as _l
 from flask_pagedown.fields import PageDownField
 
 

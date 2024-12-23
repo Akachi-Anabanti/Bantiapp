@@ -14,7 +14,6 @@ from app.models import Post, Comment, Notification, User, Message, PusherNotific
 from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
 from datetime import datetime
-from flask_babel import get_locale
 from flask import abort
 
 
@@ -24,7 +23,6 @@ def before_request():
         g.search_form = SearchForm()
         g.empty_form = EmptyForm()
         g.post_form = PostForm()
-    g.locale = str(get_locale())
 
 
 @main.route("/explore")
