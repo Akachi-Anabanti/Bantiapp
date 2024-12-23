@@ -130,6 +130,7 @@ wsproto = "1.2.0"
 wtforms = "3.0.1"
 zipp = "3.8.0"
 elasticsearch = "^8.17.0"
+email-validator = "^2.2.0"
 
 
 
