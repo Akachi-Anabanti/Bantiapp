@@ -10,10 +10,14 @@ import jwt
 import json
 
 from app import db, login
+from app.models.comment import Comment
 from .mixins import SearchableMixin
 from .tables import followers, post_likes, comment_likes
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import *
+from .post import Post
+from .notification import Notification, PusherNotification
+from .task import Task
+from .message import Message
 
 class User(SearchableMixin, UserMixin, db.Model):
     """User model representing application users."""
@@ -74,6 +78,11 @@ class User(SearchableMixin, UserMixin, db.Model):
         cascade="all, delete"
     )
 
+    notifications = db.relationship(
+        "Notification", backref="user", lazy="dynamic", cascade="all, delete"
+    )
+
+
    # User methods
     def __init__(self, **kwargs: Any) -> None:
         """Initialize user and set UUID."""
@@ -81,11 +90,11 @@ class User(SearchableMixin, UserMixin, db.Model):
         if not self.uid:
             self.uid = uuid4().hex
 
-    @property
-    def avatar_url(self) -> str:
+    
+    def avatar(self, size):
         """Generate Gravatar URL for user."""
         digest = md5(self.email.lower().encode("utf-8")).hexdigest()
-        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s=128"
+        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
 
     def set_password(self, password: str) -> None:
         """Set hashed password."""
@@ -134,6 +143,8 @@ class User(SearchableMixin, UserMixin, db.Model):
         return self.liked_posts.filter(
             post_likes.c.post_id == post.id
         ).count() > 0
+    def has_liked_comment(self, comment: 'Comment') -> bool:
+        return self.liked_comments.filter(comment_likes.c.comment_id == comment.id).count() > 0
 
     def get_reset_password_token(self, expires_in: int = 600) -> str:
         """Generate password reset token."""
@@ -169,6 +180,23 @@ class User(SearchableMixin, UserMixin, db.Model):
         )
         db.session.add(notification)
         return notification
+    
+
+    def new_pusher_notifications(self):
+        last_checked_time = self.last_notification_checked_time or datetime(1900, 1, 1)
+        return (
+            PusherNotification.query.filter_by(target_id=self.id)
+            .filter(PusherNotification.timestamp > last_checked_time)
+            .count()
+        )
+        # MESSAGES
+    def new_messages(self):
+        last_read_time = self.last_message_read_time or datetime(1900, 1, 1)
+        return (
+            Message.query.filter_by(recipient_id=self.id)
+            .filter(Message.timestamp > last_read_time)
+            .count()
+        )
 
     def launch_task(self, name: str, description: str, *args: Any, **kwargs: Any) -> Task:
         """Launch a background task."""

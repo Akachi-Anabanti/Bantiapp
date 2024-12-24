@@ -52,7 +52,7 @@
     {% if current_user.is_authenticated %}
     <div class="w3-bar">
       {% if g.empty_form %} {{ g.empty_form.hidden_tag() }} {% if not
-      current_user.liked_p(post) %}
+      current_user.has_liked_post(post) %}
 
       <form
         class="w3-button w3-hover-white"

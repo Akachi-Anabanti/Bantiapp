@@ -25,7 +25,7 @@ def user(username):
     page = request.args.get("page", 1, type=int)
 
     posts = (
-        user.posts.union(user.liked_post)
+        user.posts.union(user.liked_posts)
         .order_by(Post.timestamp.desc())
         .paginate(
             page=page, per_page=current_app.config["POST_PER_PAGE"], error_out=False

@@ -9,7 +9,7 @@ from sqlalchemy import event
 
 from app import db
 from .mixins import SearchableMixin
-from . import *
+from .comment import Comment
 
 class Post(SearchableMixin, db.Model):
     """Post model for user posts."""

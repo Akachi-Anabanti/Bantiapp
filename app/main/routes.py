@@ -9,8 +9,14 @@ from flask import (
     g,
     jsonify,
 )
+
 from flask_login import login_required, current_user
-from app.models import Post, Comment, Notification, User, Message, PusherNotification
+from app.models.comment import Comment
+from app.models.post import Post
+from app.models.notification import Notification
+from app.models.user import User
+from app.models.message import Message
+from app.models.notification import PusherNotification
 from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
 from datetime import datetime
@@ -50,7 +56,6 @@ def index():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
-        post.set_pid()
         db.session.add(post)
         db.session.commit()
         flash("Your post is live!", category="message")
@@ -101,7 +106,6 @@ def post_detail(_id):
                 author_id=current_user.id,
                 post_id=post.id,
             )
-            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
@@ -130,7 +134,6 @@ def reply():
                 post_id=post_id,
                 parent_id=parent_id,
             )
-            reply.set_cid()
             db.session.add(reply)
             post = Post.query.get(post_id)
             reply.post = post
