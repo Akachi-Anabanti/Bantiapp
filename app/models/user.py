@@ -138,6 +138,14 @@ class User(SearchableMixin, UserMixin, db.Model):
         if self.has_liked_post(post):
             self.liked_posts.remove(post)
 
+    def like_comment(self, comment: 'Comment') -> None:
+        if not self.has_liked_comment(comment=comment):
+            self.liked_comments.append(comment)
+
+    def unlike_comment(self, comment: 'Comment') -> None:
+        if self.has_liked_comment(comment):
+            self.liked_comments.remove(comment)
+
     def has_liked_post(self, post: 'Post') -> bool:
         """Check if user has liked a post."""
         return self.liked_posts.filter(
