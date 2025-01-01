@@ -226,7 +226,7 @@ def unlike(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.unlike_p(post)
+    current_user.unlike_post(post)
     db.session.commit()
     flash("You unliked a post by {}".format(post.author.username), category="info")
     return redirect(url_for(".index"))
@@ -241,10 +241,10 @@ def like_comment(comment_id):
     if comment is None or current_user == comment.author:
         return redirect(url_for(".index"))
 
-    current_user.like_c(comment)
+    current_user.like_comment(comment)
 
     new_notification = PusherNotification(
-        action="comment_liked", source=current_user, target=comment.author
+        action="comment_liked", source_id=current_user.id, target_id=comment.author.id
     )
     db.session.add(new_notification)
 
@@ -263,7 +263,7 @@ def unlike_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first_or_404()
     if current_user == comment.author:
         return redirect(url_for(".post_detail", id=comment.post.id) + "#")
-    current_user.unlike_c(comment)
+    current_user.unlike_comment(comment)
     db.session.commit()
     flash(
         "You unliked a comment by {}".format(comment.author.username), category="info"
