@@ -95,7 +95,6 @@ def post_detail(_id):
                 author_id=current_user.id,
                 post_id=post.id,
             )
-            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
