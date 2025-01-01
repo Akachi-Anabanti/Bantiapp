@@ -83,7 +83,7 @@ def follow(username):
         current_user.follow(user)
 
         new_notification = PusherNotification(
-            action="user_followed", source=current_user, target=user
+            action="user_followed", source_id=current_user.id, target_id=user.id
         )
 
         db.session.add(new_notification)
