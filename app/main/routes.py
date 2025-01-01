@@ -299,7 +299,7 @@ def messages():
     db.session.commit()
     page = request.args.get("page", 1, type=int)
 
-    messages = current_user.messages_received.order_by(
+    messages = current_user.messages_received.union(current_user.messages_sent.filter(Message.sender_id==current_user.id)).order_by(
         Message.timestamp.desc()
     ).paginate(page, current_app.config["POST_PER_PAGE"], False)
     next_url = (
