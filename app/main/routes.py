@@ -207,9 +207,9 @@ def like(post_id):
     #     return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.like_p(post)
+    current_user.like_post(post)
     new_notification = PusherNotification(
-        action="post_liked", source=current_user, target=post.author
+        action="post_liked", source_id=current_user.id, target_id=post.author.id
     )
     db.session.add(new_notification)
 
