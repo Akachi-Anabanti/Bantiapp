@@ -3,8 +3,8 @@
     <strong>{{comment.author.username}}</strong>
     {% if comment.parent_id == None %} replying to
     <strong> {{post.author.username }}</strong> {% elif
-    comment.reply.author.username %}replying to
-    <strong> {{ comment.reply.author.username }} </strong>{% endif %}
+    comment.parent.author.username %}replying to
+    <strong> {{ comment.parent.author.username }} </strong>{% endif %}
 
     <small class="text-muted"
       >{{ moment(comment.timestamp).fromNow(refresh=True) }}</small
