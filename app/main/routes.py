@@ -217,7 +217,7 @@ def like(post_id):
     db.session.commit()
     # current_app.pusher('blog', 'post_liked',)
     flash("You liked a post by {}".format(post.author.username), category="info")
-    return redirect(url_for(".explore"))
+    return redirect(request.referrer)
 
 
 @main.route("/unlike/<int:post_id>", methods=["POST"])
@@ -229,7 +229,7 @@ def unlike(post_id):
     current_user.unlike_post(post)
     db.session.commit()
     flash("You unliked a post by {}".format(post.author.username), category="info")
-    return redirect(url_for(".index"))
+    return redirect(request.referrer)
 
 
 @main.route("/like_comment/<int:comment_id>", methods=["POST"])
