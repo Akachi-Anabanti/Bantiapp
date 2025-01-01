@@ -262,13 +262,13 @@ def like_comment(comment_id):
 def unlike_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first_or_404()
     if current_user == comment.author:
-        return redirect(url_for(".post_detail", id=comment.post.id) + "#")
+        return redirect(url_for(".post_detail", _id=comment.post.id) + "#")
     current_user.unlike_comment(comment)
     db.session.commit()
     flash(
         "You unliked a comment by {}".format(comment.author.username), category="info"
     )
-    return redirect(url_for(".post_detail", id=comment.post.pid) + "#")
+    return redirect(url_for(".post_detail", _id=comment.post.pid) + "#")
 
 
 @main.route("/send_message/<recipient>", methods=["POST", "GET"])
