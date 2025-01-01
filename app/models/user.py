@@ -78,6 +78,22 @@ class User(SearchableMixin, UserMixin, db.Model):
         cascade="all, delete"
     )
 
+    messages_sent = db.relationship(
+        "Message",
+        foreign_keys="Message.sender_id",
+        backref="author",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
+
+    messages_received = db.relationship(
+        "Message",
+        foreign_keys="Message.recipient_id",
+        backref="recipient",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
+
     notifications = db.relationship(
         "Notification", backref="user", lazy="dynamic", cascade="all, delete"
     )
