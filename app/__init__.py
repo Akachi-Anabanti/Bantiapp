@@ -4,7 +4,7 @@ import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from elasticsearch import Elasticsearch
-from app.extensions import db, migrate, login, mail, moment, pusher, pagedown #bable, 
+from app.extensions import db, migrate, login, mail, moment, pusher, pagedown
 from redis import Redis
 import rq
 

@@ -9,6 +9,8 @@ from flask import (
     g,
     jsonify,
 )
+from app.notifications import (notify_comment, notify_comment_like, notify_follow,
+                           notify_message, notify_new_post, notify_post_like)
 
 from flask_login import login_required, current_user
 from app.models.comment import Comment
@@ -250,10 +252,11 @@ def like_comment(comment_id):
 
     comment.author.add_notification(
         "post_liked", comment.author.new_pusher_notifications()
-    )  # ADDING LIKED COMMENT NOTIFICATIONS
+    )
     db.session.commit()
 
     flash("You liked a comment by {}".format(comment.author.username), category="info")
+
     return redirect(url_for(".post_detail", _id=comment.post.pid) + "#")
 
 
