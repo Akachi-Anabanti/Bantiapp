@@ -1,23 +1,36 @@
+{% if messages|length > 0 %}
+<!--  -->
+{% set message_dict = {} %} {% for message in messages %} {% set partner_id =
+message.recipient.id if message.author.id == current_user.id else
+message.author.id %}
+<!--  -->
+{% if partner_id not in message_dict or message.timestamp >
+message_dict[partner_id].timestamp %}
+<!--  -->
+{% set _ = message_dict.update({partner_id: message}) %} {% endif %} {% endfor
+%}
+<!--  -->
+{% for message in message_dict.values() %}
 <div
   class="w3-bar w3-border-bottom w3-hover-grey w3-hover-opacity"
   style="transform: rotate(0)"
 >
+  {% set partner = message.recipient if message.author.id == current_user.id
+  else message.author %}
   <a
-    href="{{url_for('main.chat', username=message.author.username)}}"
+    href="{{url_for('main.chat', username=partner.username)}}"
     class="stretched-link"
   ></a>
-  {% with author = message.author %}
   <a
     class="link-dark w3-bar-item w3-left"
-    href="{{ url_for('bp.user', username=message.author.username )}}"
+    href="{{ url_for('bp.user', username=partner.username )}}"
     style="position: relative; z-index: 1000"
   >
-    {{ author.username }}
+    {{ partner.username }}
   </a>
-
-  <p class="w3-bar-item">sent you a message</p>
-  <span class="text-muted w3-display-topright w3-margin-right"
-    >{{ moment(message.timestamp).fromNow(refresh=True) }}</span
-  >
-  {% endwith %}
+  <p class="w3-bar-item">{{ message.body | trim }}</p>
+  <span class="text-muted w3-display-topright w3-margin-right">
+    {{ moment(message.timestamp).fromNow(refresh=True) }}
+  </span>
 </div>
+{% endfor %} {% endif %}

@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+cat requirements.txt | while read line; do
+    poetry add "$line"
+done

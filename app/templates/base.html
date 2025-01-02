@@ -56,6 +56,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css
 "
     />
+
     <!-- custom css -->
     <link rel="stylesheet" href="../static/css/main.css" />
     <link rel="stylesheet" href="../static/css/badge_design.css" />
@@ -182,6 +183,7 @@
       integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
       crossorigin="anonymous"
     ></script>
+
     <!-- <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script> -->
 
     {% if current_user.is_authenticated %}
@@ -196,6 +198,7 @@
     <script src="../static/js/typing.js"></script>
     <script src="../static/js/createPostModal.js"></script>
     <script src="../static/js/holiday.js"></script>
+
     {% endif %}{% endblock %}
 
     <!-- <script src="../static/assets/dist/js/menu_popover.js"></script> -->
@@ -315,6 +318,17 @@
         setTimeout(function () {
           elem.popover("dispose");
         }, 4000);
+      });
+    </script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+      var pusher = new Pusher("3f17c5fddcd0e9fff870", {
+        cluster: "eu",
+      });
+
+      var channel = pusher.subscribe("my-channel");
+      channel.bind("my-event", function (data) {
+        alert(JSON.stringify(data));
       });
     </script>
     {% endif %}

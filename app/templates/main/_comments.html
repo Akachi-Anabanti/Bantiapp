@@ -3,8 +3,8 @@
     <strong>{{comment.author.username}}</strong>
     {% if comment.parent_id == None %} replying to
     <strong> {{post.author.username }}</strong> {% elif
-    comment.reply.author.username %}replying to
-    <strong> {{ comment.reply.author.username }} </strong>{% endif %}
+    comment.parent.author.username %}replying to
+    <strong> {{ comment.parent.author.username }} </strong>{% endif %}
 
     <small class="text-muted"
       >{{ moment(comment.timestamp).fromNow(refresh=True) }}</small
@@ -15,7 +15,7 @@
 
     {% if current_user.is_authenticated %}
     <div class="w3-bar">
-      {% if not current_user.liked_c(comment) %}
+      {% if not current_user.has_liked_comment(comment) %}
       <form
         class="w3-button w3-hover-white"
         action="{{ url_for('main.like_comment', comment_id=comment.id)}}"

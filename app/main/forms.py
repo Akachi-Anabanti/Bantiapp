@@ -10,7 +10,6 @@ from wtforms import (
 )
 
 from flask import request
-from flask_babel import lazy_gettext as _l
 from flask_pagedown.fields import PageDownField
 
 

@@ -19,7 +19,7 @@ from wtforms import (
 )
 from app.models import User
 from flask import request
-from flask_babel import lazy_gettext as _l
+
 
 
 class LoginForm(FlaskForm):

@@ -9,12 +9,19 @@ from flask import (
     g,
     jsonify,
 )
+from app.notifications import (notify_comment, notify_comment_like, notify_follow,
+                           notify_message, notify_new_post, notify_post_like)
+
 from flask_login import login_required, current_user
-from app.models import Post, Comment, Notification, User, Message, PusherNotification
+from app.models.comment import Comment
+from app.models.post import Post
+from app.models.notification import Notification
+from app.models.user import User
+from app.models.message import Message
+from app.models.notification import PusherNotification
 from app import db
 from .forms import PostForm, CommentForm, MessageForm, SearchForm, EmptyForm
 from datetime import datetime
-from flask_babel import get_locale
 from flask import abort
 
 
@@ -24,7 +31,6 @@ def before_request():
         g.search_form = SearchForm()
         g.empty_form = EmptyForm()
         g.post_form = PostForm()
-    g.locale = str(get_locale())
 
 
 @main.route("/explore")
@@ -52,7 +58,6 @@ def index():
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.post.data, author=current_user)
-        post.set_pid()
         db.session.add(post)
         db.session.commit()
         flash("Your post is live!", category="message")
@@ -92,7 +97,6 @@ def post_detail(_id):
                 author_id=current_user.id,
                 post_id=post.id,
             )
-            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
@@ -103,7 +107,6 @@ def post_detail(_id):
                 author_id=current_user.id,
                 post_id=post.id,
             )
-            new_comment.set_cid()
             db.session.add(new_comment)
             new_comment.post = post
             db.session.commit()
@@ -132,7 +135,6 @@ def reply():
                 post_id=post_id,
                 parent_id=parent_id,
             )
-            reply.set_cid()
             db.session.add(reply)
             post = Post.query.get(post_id)
             reply.post = post
@@ -207,9 +209,9 @@ def like(post_id):
     #     return redirect(url_for(".index"))
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.like_p(post)
+    current_user.like_post(post)
     new_notification = PusherNotification(
-        action="post_liked", source=current_user, target=post.author
+        action="post_liked", source_id=current_user.id, target_id=post.author.id
     )
     db.session.add(new_notification)
 
@@ -217,7 +219,7 @@ def like(post_id):
     db.session.commit()
     # current_app.pusher('blog', 'post_liked',)
     flash("You liked a post by {}".format(post.author.username), category="info")
-    return redirect(url_for(".explore"))
+    return redirect(request.referrer)
 
 
 @main.route("/unlike/<int:post_id>", methods=["POST"])
@@ -226,10 +228,10 @@ def unlike(post_id):
     post = Post.query.filter_by(id=post_id).first_or_404()
     if current_user == post.author:
         return redirect(url_for(".index"))
-    current_user.unlike_p(post)
+    current_user.unlike_post(post)
     db.session.commit()
     flash("You unliked a post by {}".format(post.author.username), category="info")
-    return redirect(url_for(".index"))
+    return redirect(request.referrer)
 
 
 @main.route("/like_comment/<int:comment_id>", methods=["POST"])
@@ -241,19 +243,20 @@ def like_comment(comment_id):
     if comment is None or current_user == comment.author:
         return redirect(url_for(".index"))
 
-    current_user.like_c(comment)
+    current_user.like_comment(comment)
 
     new_notification = PusherNotification(
-        action="comment_liked", source=current_user, target=comment.author
+        action="comment_liked", source_id=current_user.id, target_id=comment.author.id
     )
     db.session.add(new_notification)
 
     comment.author.add_notification(
         "post_liked", comment.author.new_pusher_notifications()
-    )  # ADDING LIKED COMMENT NOTIFICATIONS
+    )
     db.session.commit()
 
     flash("You liked a comment by {}".format(comment.author.username), category="info")
+
     return redirect(url_for(".post_detail", _id=comment.post.pid) + "#")
 
 
@@ -262,13 +265,13 @@ def like_comment(comment_id):
 def unlike_comment(comment_id):
     comment = Comment.query.filter_by(id=comment_id).first_or_404()
     if current_user == comment.author:
-        return redirect(url_for(".post_detail", id=comment.post.id) + "#")
-    current_user.unlike_c(comment)
+        return redirect(url_for(".post_detail", _id=comment.post.id) + "#")
+    current_user.unlike_comment(comment)
     db.session.commit()
     flash(
         "You unliked a comment by {}".format(comment.author.username), category="info"
     )
-    return redirect(url_for(".post_detail", id=comment.post.pid) + "#")
+    return redirect(url_for(".post_detail", _id=comment.post.pid) + "#")
 
 
 @main.route("/send_message/<recipient>", methods=["POST", "GET"])
@@ -299,7 +302,7 @@ def messages():
     db.session.commit()
     page = request.args.get("page", 1, type=int)
 
-    messages = current_user.messages_received.order_by(
+    messages = current_user.messages_received.union(current_user.messages_sent.filter(Message.sender_id==current_user.id)).order_by(
         Message.timestamp.desc()
     ).paginate(page, current_app.config["POST_PER_PAGE"], False)
     next_url = (
@@ -326,7 +329,8 @@ def chat(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if not current_user.is_following(user):
-        abort(401)
+        flash("You have to follow this user to be able to chat with them!", "warning")
+        return redirect(request.referrer)
     page = request.args.get("page", 1, type=int)
 
     received_messages = current_user.messages_sent.filter(

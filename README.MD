@@ -13,6 +13,8 @@ To run this application locally, follow these steps:
 
 `python app.py`
 
+### ENSURE YOU HAVE PYTHON3-DEV and build-essential installed on your linux computer
+
 The application will be accessible at `http://localhost:5000`.
 
 ## Features
@@ -44,4 +46,3 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 ## Acknowledgments
 
 I would like to thank all the contributors and open-source community for their valuable contributions and support.
-
