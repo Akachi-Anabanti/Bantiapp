@@ -98,6 +98,21 @@ class User(SearchableMixin, UserMixin, db.Model):
         "Notification", backref="user", lazy="dynamic", cascade="all, delete"
     )
 
+    pusher_notifications_created = db.relationship(
+        "PusherNotification",
+        foreign_keys="PusherNotification.source_id",
+        backref="source",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
+    pusher_notifications_received = db.relationship(
+        "PusherNotification",
+        foreign_keys="PusherNotification.target_id",
+        backref="target",
+        lazy="dynamic",
+        cascade="all, delete",
+    )
+
 
    # User methods
     def __init__(self, **kwargs: Any) -> None:

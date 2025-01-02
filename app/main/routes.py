@@ -326,7 +326,8 @@ def chat(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     if not current_user.is_following(user):
-        abort(401)
+        flash("You have to follow this user to be able to chat with them!", "warning")
+        return redirect(request.referrer)
     page = request.args.get("page", 1, type=int)
 
     received_messages = current_user.messages_sent.filter(

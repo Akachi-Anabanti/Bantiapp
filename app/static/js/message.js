@@ -58,7 +58,6 @@ function display_notification() {
       notify.style.display = "block";
 
       document.getElementById("notification-content").innerHTML = resp;
-
       notify.getElementById("notification-button").style.pointerEvents = "none";
       notify.getElementById("notification-button").style.cursor = "default";
     },

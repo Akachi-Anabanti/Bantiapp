@@ -2,11 +2,11 @@ var today = new Date();
 var country = "NG";
 const settings = {
   async: true,
-  url: `https://public-holiday.p.rapidapi.com/2023/${country}`,
+  url: `https://public-holidays7.p.rapidapi.com/${today.getFullYear()}/${country}`,
   method: "GET",
   headers: {
-    "X-RapidAPI-Key": "f9193e0f25msha75dc8dacfd3fcap1dce78jsnc2fb2855c86a",
-    "X-RapidAPI-Host": "public-holiday.p.rapidapi.com",
+    "X-RapidAPI-Key": "048205d227msh3bc0303ac75abd0p184968jsn3183cb403f2c",
+    "X-RapidAPI-Host": "public-holidays7.p.rapidapi.com",
   },
 };
 
